@@ -1,0 +1,32 @@
+.navbar {
+	background: black;
+	color: white;
+	padding: 0.5em 0;
+
+	a.title {
+		color: white;
+		text-decoration: none;
+		font-weight: bold;
+		padding-left: 0.5em;
+	}
+}
+
+ul {
+	list-style-type: none;
+	display: flex;
+	margin: 0;
+	padding: 0;
+	float: right;
+
+	li {
+		display: inline-block;
+		padding: 0 0.5em;
+
+
+		a {
+			text-decoration: none;
+			color: white;
+		}
+
+	}
+}

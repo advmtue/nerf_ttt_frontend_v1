@@ -1,0 +1,15 @@
+<h1>Active Games</h1>
+
+<div class="game-container" *ngFor="let game of gameList">
+	<div class="game-item">
+		<div class="game-info">
+			<h3 class="title">{{ game.name }}</h3>
+			<p>by <a href="#" routerLink="/user/{{ game.owner_id }}">{{ game.owner_name }}</a></p>
+			<p>{{ game.player_count }} Players</p>
+		</div>
+		<div class="game-view">
+			<a href="#" routerLink="/game/{{ game.id }}">View</a>
+		</div>
+	</div>
+</div>
+

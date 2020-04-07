@@ -1,0 +1,37 @@
+<div class='profile-wrap'>
+
+	<div class='avatar'>
+		<div class="img"></div>
+	</div>
+
+	<div class='info'>
+		<h1>{{ player.role }} {{ player.firstname }} {{ player.lastname }}</h1>
+		<p>Member since: {{ player.date_joined }}</p>
+		<table>
+			<tr>
+				<td>Kills</td>
+				<td>{{ player.kills }}</td>
+			</tr>
+			<tr>
+				<td>Deaths</td>
+				<td>{{ player.deaths }}</td>
+			</tr>
+			<tr>
+				<td>KD Ratio</td>
+				<td>{{ player.kills / player.deaths || 0}}</td>
+			</tr>
+			<tr>
+				<td>Wins</td>
+				<td>{{ player.wins }}</td>
+			</tr>
+			<tr>
+				<td>Losses</td>
+				<td>{{ player.losses }}</td>
+			</tr>
+			<tr>
+				<td>Win Ratio</td>
+				<td>{{ player.wins / player.losses || 0}}</td>
+			</tr>
+		</table>
+	</div>
+</div>
