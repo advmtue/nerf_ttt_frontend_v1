@@ -35,7 +35,7 @@ export class PlayerlistComponent implements OnInit {
 			this.activeList = this.playerList.filter((pl: User) => {
 				let name = pl.first_name + pl.last_name;
 				name = name.toLowerCase();
-				return name.indexOf(this.searchName) > -1;
+				return name.indexOf(this.searchName.toLowerCase()) > -1;
 			});
 		}
 	}
