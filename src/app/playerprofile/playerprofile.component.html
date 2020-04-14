@@ -4,33 +4,33 @@
 		<div class="img"></div>
 	</div>
 
-	<div class='info'>
-		<h1>{{ player.role }} {{ player.firstname }} {{ player.lastname }}</h1>
-		<p>Member since: {{ player.date_joined }}</p>
+	<div class='info' *ngIf="profile">
+		<h1>{{ profile.first_name }} {{ profile.last_name }}</h1>
+		<p>Member since: {{ profile.join_date}}</p>
 		<table>
 			<tr>
 				<td>Kills</td>
-				<td>{{ player.kills }}</td>
+				<td>{{ profile.kills }}</td>
 			</tr>
 			<tr>
 				<td>Deaths</td>
-				<td>{{ player.deaths }}</td>
+				<td>{{ profile.deaths }}</td>
 			</tr>
 			<tr>
 				<td>KD Ratio</td>
-				<td>{{ player.kills / player.deaths || 0}}</td>
+				<td>{{ profile.kills / profile.deaths || 0}}</td>
 			</tr>
 			<tr>
 				<td>Wins</td>
-				<td>{{ player.wins }}</td>
+				<td>{{ profile.wins }}</td>
 			</tr>
 			<tr>
 				<td>Losses</td>
-				<td>{{ player.losses }}</td>
+				<td>{{ profile.losses }}</td>
 			</tr>
 			<tr>
 				<td>Win Ratio</td>
-				<td>{{ player.wins / player.losses || 0}}</td>
+				<td>{{ profile.wins / profile.losses || 0}}</td>
 			</tr>
 		</table>
 	</div>

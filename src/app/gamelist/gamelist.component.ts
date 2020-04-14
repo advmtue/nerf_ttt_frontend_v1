@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../api.service';
 
 @Component({
 	selector: 'app-gamelist',
@@ -8,29 +9,17 @@ import { Component, OnInit } from '@angular/core';
 
 export class GamelistComponent implements OnInit {
 
-	gameList: any = [
-		{
-			name: "Game One",
-			id: 1,
-			owner_name: "Adam",
-			owner_id: 31,
-			date_created: "01 JAN 1970 6:54pm",
-			player_count: 3
-		},
-		{
-			name: "Game Twoooo000",
-			id: 2,
-			owner_name: "Russel",
-			owner_id: 69,
-			date_created: "02 JAN 1970 6:54pm",
-			player_count: 69
-		}
-	]
+	gameList: any;
 
-
-	constructor() { }
+	constructor(private apiService: ApiService) { }
 
 	ngOnInit(): void {
+		this.apiService.lobbyList()
+		.subscribe((lobbies: any) => {
+			this.gameList = lobbies;
+			console.log(this.gameList)
+		});
 	}
+
 
 }

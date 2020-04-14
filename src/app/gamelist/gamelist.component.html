@@ -4,7 +4,7 @@
 	<div class="game-item">
 		<div class="game-info">
 			<h3 class="title">{{ game.name }}</h3>
-			<p>by <a href="#" routerLink="/user/{{ game.owner_id }}">{{ game.owner_name }}</a></p>
+			<p>by <a href="#" routerLink="/user/{{ game.owner_id }}">{{ game.owner_first_name }} {{ game.owner_last_name }}</a></p>
 			<p>{{ game.player_count }} Players</p>
 		</div>
 		<div class="game-view">
