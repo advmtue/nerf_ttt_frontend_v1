@@ -1,11 +1,13 @@
 <h1>Players</h1>
-<div class="container" *ngIf="playerList">
-	<div *ngFor="let player of playerList">
-		<div class="player-container">
-			<a href="#" routerLink="/user/{{ player.id }}">
+<div class="search">
+	<input type="text" [(ngModel)]="searchName" (input)="updateFilter()">
+	<p>Showing {{ playerList.length }} player(s)</p>
+</div>
+<div class="container">
+	<div class="player-container" *ngFor="let player of activeList">
+		<a href="#" routerLink="/user/{{ player.id }}">
 				<p class="title">{{ player.first_name }} {{ player.last_name }}</p>
-			</a>
-		</div>
+		</a>
 	</div>
 </div>
 
