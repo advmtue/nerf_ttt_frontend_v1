@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
+import { User } from '../../models/user';
 
 @Component({
 	selector: 'app-playerlist',
@@ -7,37 +8,35 @@ import { ApiService } from '../api.service';
 	styleUrls: ['./playerlist.component.scss']
 })
 export class PlayerlistComponent implements OnInit {
-
-	playerList: any;
-	filterList: any;
-	activeList: any;
-	searchName: string = '';
+	private playerList: User[];
+	private filterList: User[];
+	public activeList: User[];
+	public searchName: string;
 
 	constructor(private apiService: ApiService) {
 		this.playerList = [];
-		this.activeList = [];
 		this.filterList = [];
+		this.activeList = [];
+		this.searchName = '';
 	}
 
 	ngOnInit(): void {
 		this.apiService.playerList()
-		.subscribe((players: any) => {
+		.subscribe((players: User[]) => {
 			this.playerList = players;
 			this.activeList = this.playerList;
 		});
 	}
 
 	updateFilter() {
-		this.filterList = this.playerList.filter((pl) => {
-			let name = pl.first_name + pl.last_name;
-			name = name.toLowerCase();
-			return name.indexOf(this.searchName) > -1;
-		});
-
 		if (this.searchName === '') {
 			this.activeList = this.playerList;
 		} else {
-			this.activeList = this.filterList;
+			this.activeList = this.playerList.filter((pl: User) => {
+				let name = pl.first_name + pl.last_name;
+				name = name.toLowerCase();
+				return name.indexOf(this.searchName) > -1;
+			});
 		}
 	}
 }

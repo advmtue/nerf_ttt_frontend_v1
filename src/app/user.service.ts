@@ -7,13 +7,20 @@ import { ApiService } from './api.service';
 export class UserService {
 	loggedIn: boolean = false;
 	user: any;
-	sessionId: string;
 
 	constructor(private apiService: ApiService) {
-		this.getSessionFromLocal();
+		this.getAuthToken();
 	}
 
-	getSessionFromLocal() {
+	getAuthToken() {
+		let token = localStorage.getItem('auth-token');
+
+		if (token === null) {
+			console.log('No login session...');
+		} else {
+			console.log('Found login session');
+			// Check expiry
+		}
 	}
 
 	validateSession() {

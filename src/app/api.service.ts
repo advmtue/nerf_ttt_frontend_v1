@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { User } from '../models/user';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,12 +25,12 @@ export class ApiService {
 
 	/* GET /player */
 	playerList() {
-		return this.http.get(this.getUrl('player'));
+		return this.http.get<User[]>(this.getUrl('player'));
 	}
 
 	/* GET /player/:id */
 	playerProfile(id: string) {
-		return this.http.get(this.getUrl('player/' + id));
+		return this.http.get<User>(this.getUrl('player/' + id));
 	}
 
 	/* Get /lobby */
