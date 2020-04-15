@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
+import { UserService } from '../user.service';
 
 @Component({
 	selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
 
 	loginStatus: string = "Login";
 
-	constructor(private apiService: ApiService) { }
+	constructor(private apiService: ApiService, private userService: UserService) { }
 
 	ngOnInit(): void {
 	}
@@ -45,8 +46,7 @@ export class LoginComponent implements OnInit {
 
 		this.loginStatus = "Logging in...";
 
-		this.apiService.login(this.username, this.password)
-			.subscribe((data: any) => console.log(data));
+		this.userService.login(this.username, this.password);
 	}
 
 }

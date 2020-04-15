@@ -9,27 +9,29 @@ import { LobbylistComponent } from './lobbylist/lobbylist.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { PlayerprofileComponent } from './playerprofile/playerprofile.component';
 
+import { LoginGuard } from './login.guard';
+
 const routes: Routes = [
 	// Homepage -> Available lobbies
-	{ path: '', component: LobbylistComponent },
+	{ path: '', component: LobbylistComponent, canActivate: [LoginGuard]},
 
 	// Player login
 	{ path: 'login', component: LoginComponent },
 
 	// View game history
-	{ path: 'game', component: GamehistoryComponent },
+	{ path: 'game', component: GamehistoryComponent, canActivate: [LoginGuard] },
 	// Redirects depending on state
 	// Game -> Game or home if not auth
 	// Lobby -> LobbyComponent
 	// Ended -> Gamestats
-	{ path: 'game/:id', component: LobbyComponent },
-	{ path: 'game/:id/stats', component: GamestatsComponent },
-	{ path: 'game/:id/active', component: GameComponent },
-	{ path: 'game/:id/lobby', component: LobbyComponent },
+	{ path: 'game/:id', component: LobbyComponent, canActivate: [LoginGuard] },
+	{ path: 'game/:id/stats', component: GamestatsComponent, canActivate: [LoginGuard] },
+	{ path: 'game/:id/active', component: GameComponent, canActivate: [LoginGuard] },
+	{ path: 'game/:id/lobby', component: LobbyComponent, canActivate: [LoginGuard] },
 
 	// View player list or specific
-	{ path: 'user', component: PlayerlistComponent },
-	{ path: 'user/:id', component: PlayerprofileComponent }
+	{ path: 'user', component: PlayerlistComponent, canActivate: [LoginGuard] },
+	{ path: 'user/:id', component: PlayerprofileComponent, canActivate: [LoginGuard] }
 ];
 
 @NgModule({

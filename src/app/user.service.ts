@@ -1,28 +1,40 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
+import { User } from '../models/user';
+import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class UserService {
-	loggedIn: boolean = false;
-	user: any;
+	public user: User;
 
-	constructor(private apiService: ApiService) {
+	private authJWT: string = '';
+
+	constructor(private apiService: ApiService, private router: Router) {
+		// Setup auth tokens if they exist
 		this.getAuthToken();
-	}
 
-	getAuthToken() {
-		let token = localStorage.getItem('auth-token');
-
-		if (token === null) {
-			console.log('No login session...');
+		if (!this.loggedIn) {
+			router.navigate(['/login']);
+			// Redirect to login
 		} else {
-			console.log('Found login session');
-			// Check expiry
+			// Pull user from api
 		}
 	}
 
-	validateSession() {
+	getAuthToken() {
+		this.authJWT = localStorage.getItem('auth-token') || '';
+	}
+
+	// Get login state
+	get loggedIn(): boolean {
+		return this.authJWT !== '';
+	}
+
+	login(username: string, password: string) {
+		this.apiService.login(username, password).subscribe(pl => {
+			console.log(pl);
+		})
 	}
 }
