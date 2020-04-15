@@ -10,3 +10,10 @@ export interface User {
 	group_icon_file?: string
 }
 
+export interface UserProfile extends User {
+	stats_kills: number;
+	stats_deaths: number;
+	stats_wins: number;
+	stats_losses: number;
+	stats_played: number
+}

@@ -1,0 +1,18 @@
+<h1>Lobbies</h1>
+<div class="container">
+	<div class="lobby-tile" *ngFor="let lobby of lobbies">
+		<div class="info">
+			<p class="title">{{ lobby.name }}</p>
+			<p class="owner">
+				by {{ lobby.owner_group_emoji }}
+				<a href="#" routerLink="/user/{{ lobby.owner_id }}" [style.color]="lobby.owner_group_colour">
+					{{ lobby.owner_first_name }} {{ lobby.owner_last_name }}
+				</a>
+			</p>
+			<p class="players">{{ lobby.player_count }} player(s)</p>
+		</div>
+		<a href="#" class="view" routerLink="/game/{{ lobby.id }}">
+			<p>View</p>
+		</a>
+	</div>
+</div>

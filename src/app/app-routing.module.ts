@@ -5,13 +5,13 @@ import { PlayerlistComponent } from './playerlist/playerlist.component';
 import { GamehistoryComponent } from './gamehistory/gamehistory.component';
 import { GamestatsComponent } from './gamestats/gamestats.component';
 import { GameComponent } from './game/game.component';
-import { GamelistComponent } from './gamelist/gamelist.component';
+import { LobbylistComponent } from './lobbylist/lobbylist.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { PlayerprofileComponent } from './playerprofile/playerprofile.component';
 
 const routes: Routes = [
 	// Homepage -> Available lobbies
-	{ path: '', component: GamelistComponent },
+	{ path: '', component: LobbylistComponent },
 
 	// Player login
 	{ path: 'login', component: LoginComponent },

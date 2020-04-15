@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
+import { UserProfile } from '../../models/user';
 
 @Component({
 	selector: 'app-playerprofile',
@@ -15,9 +16,9 @@ export class PlayerprofileComponent implements OnInit {
 
 	getProfile(id: string) {
 		this.apiService.playerProfile(id)
-		.subscribe((profiles: any) => {
-			console.log(profiles);
-			this.profile = profiles[0];
+		.subscribe((profile: UserProfile) => {
+			this.profile = profile;
+			console.log(this.profile);
 		});
 	}
 

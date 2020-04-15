@@ -10,10 +10,10 @@ import { PlayerlistComponent } from './playerlist/playerlist.component';
 import { GamehistoryComponent } from './gamehistory/gamehistory.component';
 import { GameComponent } from './game/game.component';
 import { GamestatsComponent } from './gamestats/gamestats.component';
-import { GamelistComponent } from './gamelist/gamelist.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { PlayerprofileComponent } from './playerprofile/playerprofile.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { LobbylistComponent } from './lobbylist/lobbylist.component';
 
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
@@ -26,10 +26,10 @@ import { UserService } from './user.service';
 		GamehistoryComponent,
 		GameComponent,
 		GamestatsComponent,
-		GamelistComponent,
 		LobbyComponent,
 		PlayerprofileComponent,
-		NavbarComponent
+		NavbarComponent,
+		LobbylistComponent
 	],
 	imports: [
 		BrowserModule,

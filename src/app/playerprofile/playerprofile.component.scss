@@ -1,28 +1,18 @@
 .profile-wrap {
 
-	.avatar {
-		margin-top: 1.5em;
-
-		.img {
-			background: lightgrey;
-			width: 40%;
-			padding-top: 40%;
-			margin: 0 auto 0 auto;
-		}
-	}
-
 	.info {
-		h2.title {
+		.title {
 			text-align: center;
-			margin-bottom: 0.1em;
+			margin: 3em 0 1em 0;
 		}
 
-		p {
+		.join_date {
+			margin-bottom: 5em;
 			text-align: center;
-			margin-top: 0em;
 		}
 
 		table {
+			width: 100%;
 			margin-top: 2em;
 		}
 

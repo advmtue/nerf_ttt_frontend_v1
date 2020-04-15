@@ -1,31 +1,39 @@
 <div class='profile-wrap'>
 	<div class='info' *ngIf="profile">
-		<h2 class="title" [style.color]="profile.group_colour">{{ profile.group_emoji }} {{ profile.first_name }} {{ profile.last_name }}</h2>
-		<p>Member since: {{ profile.join_date}}</p>
+		<h2 class="title" [style.color]="profile.group_colour">
+			{{ profile.group_emoji }} 
+			{{ profile.first_name }} 
+			{{ profile.last_name }}
+		</h2>
+		<p class="join_date">Member since: {{ profile.join_date | date: 'dd-MM-yyyy' }}</p>
 		<table>
 			<tr>
+				<td>Rank</td>
+				<td>{{ profile.group_name }}</td>
+			</tr>
+			<tr>
 				<td>Kills</td>
-				<td>{{ profile.kills }}</td>
+				<td>{{ profile.stats_kills }}</td>
 			</tr>
 			<tr>
 				<td>Deaths</td>
-				<td>{{ profile.deaths }}</td>
+				<td>{{ profile.stats_deaths }}</td>
 			</tr>
 			<tr>
 				<td>KD Ratio</td>
-				<td>{{ profile.kills / profile.deaths || 0}}</td>
+				<td>{{ profile.stats_kills / profile.stats_deaths || 0}}</td>
 			</tr>
 			<tr>
 				<td>Wins</td>
-				<td>{{ profile.wins }}</td>
+				<td>{{ profile.stats_wins }}</td>
 			</tr>
 			<tr>
 				<td>Losses</td>
-				<td>{{ profile.losses }}</td>
+				<td>{{ profile.stats_losses }}</td>
 			</tr>
 			<tr>
 				<td>Win Ratio</td>
-				<td>{{ profile.wins / profile.losses || 0}}</td>
+				<td>{{ profile.stats_wins / profile.stats_losses || 0}}</td>
 			</tr>
 		</table>
 	</div>
