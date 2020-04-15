@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User, UserProfile } from '../models/user';
 import { Lobby } from '../models/lobby';
+import { LoginResponse } from '../models/auth';
+
 
 @Injectable({
 	providedIn: 'root'
@@ -18,7 +20,7 @@ export class ApiService {
 	login(username: string, password: string) {
 		let loginDetails = {username: username, password: password};
 
-		return this.http.post(
+		return this.http.post<LoginResponse>(
 			this.getUrl('login'),
 			loginDetails
 		)

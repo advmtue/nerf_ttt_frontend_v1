@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-login',
@@ -10,15 +11,18 @@ import { UserService } from '../user.service';
 
 export class LoginComponent implements OnInit {
 
-	username: string;
-	password: string;
+	public username: string;
+	public password: string;
 
-	usernameError: string = "valid";
-	passwordError: string = "valid";
+	public usernameError: string = "valid";
+	public passwordError: string = "valid";
+	public error: string = "valid";
 
-	loginStatus: string = "Login";
-
-	constructor(private apiService: ApiService, private userService: UserService) { }
+	constructor(
+		private apiService: ApiService,
+		private userService: UserService,
+		private router: Router
+	) { }
 
 	ngOnInit(): void {
 	}
@@ -44,9 +48,13 @@ export class LoginComponent implements OnInit {
 
 		if (shouldFail) return;
 
-		this.loginStatus = "Logging in...";
-
-		this.userService.login(this.username, this.password);
+		this.userService.login(this.username, this.password, (result: Boolean) => {
+			if (result) {
+				this.router.navigate(['/']);
+			} else {
+				this.error = 'Invalid username/password';
+			}
+		});
 	}
 
 }

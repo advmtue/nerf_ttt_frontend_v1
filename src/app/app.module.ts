@@ -17,6 +17,7 @@ import { LobbylistComponent } from './lobbylist/lobbylist.component';
 
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
 	declarations: [
@@ -29,7 +30,8 @@ import { UserService } from './user.service';
 		LobbyComponent,
 		PlayerprofileComponent,
 		NavbarComponent,
-		LobbylistComponent
+		LobbylistComponent,
+		LogoutComponent
 	],
 	imports: [
 		BrowserModule,

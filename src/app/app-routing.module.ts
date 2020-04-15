@@ -8,6 +8,7 @@ import { GameComponent } from './game/game.component';
 import { LobbylistComponent } from './lobbylist/lobbylist.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { PlayerprofileComponent } from './playerprofile/playerprofile.component';
+import { LogoutComponent } from './logout/logout.component';
 
 import { LoginGuard } from './login.guard';
 
@@ -17,6 +18,9 @@ const routes: Routes = [
 
 	// Player login
 	{ path: 'login', component: LoginComponent },
+
+	// Logout
+	{ path: 'logout', component: LogoutComponent, canActivate: [LoginGuard]},
 
 	// View game history
 	{ path: 'game', component: GamehistoryComponent, canActivate: [LoginGuard] },

@@ -8,8 +8,6 @@ import { UserService } from '../user.service';
 })
 export class NavbarComponent implements OnInit {
 
-	user: any;
-
 	constructor(private userService: UserService) {
 	}
 

@@ -1,14 +1,24 @@
 <div class="navbar">
 	<a href="#" routerLink="/" class="title">TTT</a>
-	<ul>
-		<li>
-			<a href="#" routerLink="/game">History</a>
-		</li>
-		<li>
-			<a href="#" routerLink="/user">Players</a>
-		</li>
-		<li>
-			<a href="#" routerLink="/login">Login</a>
-		</li>
-	</ul>
+	<div *ngIf='userService.loggedIn; then thenBlock else elseBlock'></div>
+	<ng-template #thenBlock>
+		<ul>
+			<li>
+				<a href="#" routerLink="/game">History</a>
+			</li>
+			<li>
+				<a href="#" routerLink="/user">Players</a>
+			</li>
+			<li>
+				<a href="#" routerLink="/logout">Logout</a>
+			</li>
+		</ul>
+	</ng-template>
+	<ng-template #elseBlock>
+		<ul>
+			<li>
+				<a href="#" routerLine="/login">Login</a>
+			</li>
+		</ul>
+	</ng-template>
 </div>
