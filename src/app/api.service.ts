@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { User, UserProfile } from '../models/user';
 import { Lobby } from '../models/lobby';
 import { LoginResponse, PasswordResetResponse } from '../models/auth';
+import { UserService } from './user.service';
 
 
 @Injectable({
@@ -10,7 +11,17 @@ import { LoginResponse, PasswordResetResponse } from '../models/auth';
 })
 export class ApiService {
 
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient, private userService: UserService) {
+		// Pull user from the API
+		/*
+		const id = JSON.parse(atob(this.userService.jwt.split('.')[1])).id;
+		this.playerProfile(id)
+		.subscribe((user: User) => {
+			this.userService.user = user;
+			console.log(user);
+		});
+		*/
+	}
 
 	getUrl(url: string) {
 		return 'http://localhost:8080/' + url;
@@ -49,6 +60,5 @@ export class ApiService {
 			this.getUrl('passwordreset'),
 			pwDetails
 		);
-
 	}
 }

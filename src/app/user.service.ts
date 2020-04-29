@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { PasswordResetResponse, LoginResponse } from '../models/auth';
@@ -13,7 +12,7 @@ export class UserService {
 	private passwordResetRequired = false;
 	private authJWT = '';
 
-	constructor(private apiService: ApiService, private router: Router) {
+	constructor(private router: Router) {
 		// Setup auth tokens if they exist
 		this.getLocalItems();
 
@@ -22,14 +21,6 @@ export class UserService {
 			// Redirect to login
 		} else if (this.loginState === 1) {
 			router.navigate(['/passwordreset']);
-		} else {
-			// Pull user from api
-			const id = JSON.parse(atob(this.authJWT.split('.')[1])).id;
-			this.apiService.playerProfile(id)
-			.subscribe((user: User) => {
-				this.user = user;
-				console.log(user);
-			});
 		}
 	}
 
@@ -39,11 +30,31 @@ export class UserService {
 		this.passwordResetRequired = localStorage.getItem('password_reset') === 'true';
 	}
 
+	performRedirects(): void {
+		if (this.loginState === 2) {
+			this.router.navigate(['/']);
+		} else if (this.loginState === 1) {
+			this.router.navigate(['/passwordreset']);
+		} else {
+			this.router.navigate(['/login']);
+		}
+	}
+
 	get loginState(): number {
 		if (this.authJWT !== '') {
 			return this.passwordResetRequired ? 1 : 2;
 		} else {
 			return 0;
+		}
+	}
+
+	set jwt(token: string) {
+		if (token === '') {
+			localStorage.removeItem('auth_token');
+			this.authJWT = '';
+		} else {
+			localStorage.setItem('auth_token', token);
+			this.authJWT = token;
 		}
 	}
 
@@ -62,30 +73,6 @@ export class UserService {
 			localStorage.removeItem('password_reset');
 		}
 		this.passwordResetRequired = val;
-	}
-
-	login(username: string, password: string, cb) {
-		this.apiService.login(username, password)
-		.subscribe((response: LoginResponse) => {
-			if (response.success) {
-				localStorage.setItem('auth_token', response.token);
-				this.authJWT = response.token;
-			}
-			this.passwordReset = response.passwordReset;
-			console.log(`Login Success? : ${response.success}`);
-			cb(response);
-		});
-	}
-
-	changePassword(currentPassword: string, newPassword: string, cb) {
-		this.apiService.changePassword(currentPassword, newPassword)
-		.subscribe((response: PasswordResetResponse) => {
-			if (response.success) {
-				this.passwordReset = false;
-				this.router.navigate(['/']);
-			}
-			cb(response);
-		});
 	}
 
 	logout() {

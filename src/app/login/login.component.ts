@@ -51,15 +51,15 @@ export class LoginComponent implements OnInit {
 			return;
 		}
 
-		this.userService.login(this.username, this.password, (result: LoginResponse) => {
-			if (result.success && result.passwordReset) {
-				this.router.navigate(['/passwordreset']);
-			} else if (result.success) {
-				this.router.navigate(['/']);
+		this.apiService.login(this.username, this.password)
+		.subscribe((response: LoginResponse) => {
+			if (response.success) {
+				this.userService.jwt = response.token;
+				this.userService.passwordReset = response.passwordReset;
+				this.userService.performRedirects();
 			} else {
 				this.error = 'Invalid credentials';
 			}
 		});
 	}
-
 }
