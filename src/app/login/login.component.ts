@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
+import { LoginResponse } from '../../models/auth';
 
 @Component({
 	selector: 'app-login',
@@ -14,9 +15,9 @@ export class LoginComponent implements OnInit {
 	public username: string;
 	public password: string;
 
-	public usernameError: string = "valid";
-	public passwordError: string = "valid";
-	public error: string = "valid";
+	public usernameError = 'valid';
+	public passwordError = 'valid';
+	public error = 'valid';
 
 	constructor(
 		private apiService: ApiService,
@@ -29,30 +30,34 @@ export class LoginComponent implements OnInit {
 
 	submitLogin() {
 
-		let shouldFail: Boolean = false;
+		let shouldFail = false;
 
 		// Basic validation
-		if (!(this.username) || this.username === "") {
-			this.usernameError = "Please enter username";
+		if (!(this.username) || this.username === '') {
+			this.usernameError = 'Please enter username';
 			shouldFail = true;
 		} else {
-			this.usernameError = "valid";
+			this.usernameError = 'valid';
 		}
 
-		if (!(this.password) || this.password === "") {
-			this.passwordError = "Please enter password";
+		if (!(this.password) || this.password === '') {
+			this.passwordError = 'Please enter password';
 			shouldFail = true;
 		} else {
-			this.passwordError = "valid"
+			this.passwordError = 'valid';
 		}
 
-		if (shouldFail) return;
+		if (shouldFail) {
+			return;
+		}
 
-		this.userService.login(this.username, this.password, (result: Boolean) => {
-			if (result) {
+		this.userService.login(this.username, this.password, (result: LoginResponse) => {
+			if (result.success && result.passwordReset) {
+				this.router.navigate(['/passwordreset']);
+			} else if (result.success) {
 				this.router.navigate(['/']);
 			} else {
-				this.error = 'Invalid username/password';
+				this.error = 'Invalid credentials';
 			}
 		});
 	}

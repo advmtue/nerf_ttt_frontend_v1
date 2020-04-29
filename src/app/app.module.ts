@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,10 +14,13 @@ import { LobbyComponent } from './lobby/lobby.component';
 import { PlayerprofileComponent } from './playerprofile/playerprofile.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LobbylistComponent } from './lobbylist/lobbylist.component';
+import { PasswordresetComponent } from './passwordreset/passwordreset.component';
+import { LogoutComponent } from './logout/logout.component';
 
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
-import { LogoutComponent } from './logout/logout.component';
+
+import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
 	declarations: [
@@ -31,7 +34,8 @@ import { LogoutComponent } from './logout/logout.component';
 		PlayerprofileComponent,
 		NavbarComponent,
 		LobbylistComponent,
-		LogoutComponent
+		LogoutComponent,
+		PasswordresetComponent
 	],
 	imports: [
 		BrowserModule,
@@ -41,7 +45,12 @@ import { LogoutComponent } from './logout/logout.component';
 	],
 	providers: [
 		ApiService,
-		UserService
+		UserService,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: AuthInterceptor,
+			multi: true
+		}
 	],
 	bootstrap: [AppComponent]
 })

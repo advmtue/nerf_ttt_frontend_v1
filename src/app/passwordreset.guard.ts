@@ -6,13 +6,13 @@ import { UserService } from './user.service';
 @Injectable({
 	providedIn: 'root'
 })
-export class LoginGuard implements CanActivate {
-	constructor(private userService: UserService) { }
+export class PasswordresetGuard implements CanActivate {
+	constructor(private userService: UserService) {}
 
 	canActivate(
 		next: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-			return this.userService.loginState === 2;
+			return this.userService.passwordReset;
 		}
 
 }

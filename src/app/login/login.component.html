@@ -1,10 +1,11 @@
 <div class="login-wrap">
 	<h1>Login</h1>
 	<form id="loginform">
+
 		<div class="form-group">
 			<label for="username">Username</label>
 			<br/>
-			<input type="text" class="form-input" [(ngModel)]="username" name="username"> 
+			<input type="text" class="form-input" [(ngModel)]="username" name="username">
 			<p class="error" *ngIf="usernameError != 'valid'">{{ usernameError }}</p>
 		</div>
 
@@ -15,6 +16,8 @@
 			<p class="error" *ngIf="passwordError != 'valid'">{{ passwordError }}</p>
 		</div>
 
-		<button (click)="submitLogin()" class="login-button">Login</button>
+		<p class="error" *ngIf="error !== 'valid'">{{ error }}</p>
+
+		<button (click)="submitLogin()" class="form-submit">Login</button>
 	</form>
 </div>

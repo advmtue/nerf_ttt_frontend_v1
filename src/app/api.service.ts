@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User, UserProfile } from '../models/user';
 import { Lobby } from '../models/lobby';
-import { LoginResponse } from '../models/auth';
+import { LoginResponse, PasswordResetResponse } from '../models/auth';
 
 
 @Injectable({
@@ -18,12 +18,12 @@ export class ApiService {
 
 	/* POST /login { username: string, password: string } */
 	login(username: string, password: string) {
-		let loginDetails = {username: username, password: password};
+		const loginDetails = {username, password};
 
 		return this.http.post<LoginResponse>(
 			this.getUrl('login'),
 			loginDetails
-		)
+		);
 	}
 
 	/* GET /player */
@@ -39,5 +39,16 @@ export class ApiService {
 	/* Get /lobby */
 	lobbyList() {
 		return this.http.get<Lobby[]>(this.getUrl('lobby'));
+	}
+
+	// Change a users password
+	changePassword(currentPassword: string, newPassword: string) {
+		const pwDetails = {currentPassword, newPassword};
+
+		return this.http.post<PasswordResetResponse>(
+			this.getUrl('passwordreset'),
+			pwDetails
+		);
+
 	}
 }

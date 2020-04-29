@@ -9,8 +9,10 @@ import { LobbylistComponent } from './lobbylist/lobbylist.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { PlayerprofileComponent } from './playerprofile/playerprofile.component';
 import { LogoutComponent } from './logout/logout.component';
+import { PasswordresetComponent } from './passwordreset/passwordreset.component';
 
 import { LoginGuard } from './login.guard';
+import { PasswordresetGuard } from './passwordreset.guard';
 
 const routes: Routes = [
 	// Homepage -> Available lobbies
@@ -20,7 +22,7 @@ const routes: Routes = [
 	{ path: 'login', component: LoginComponent },
 
 	// Logout
-	{ path: 'logout', component: LogoutComponent, canActivate: [LoginGuard]},
+	{ path: 'logout', component: LogoutComponent},
 
 	// View game history
 	{ path: 'game', component: GamehistoryComponent, canActivate: [LoginGuard] },
@@ -35,11 +37,14 @@ const routes: Routes = [
 
 	// View player list or specific
 	{ path: 'user', component: PlayerlistComponent, canActivate: [LoginGuard] },
-	{ path: 'user/:id', component: PlayerprofileComponent, canActivate: [LoginGuard] }
+	{ path: 'user/:id', component: PlayerprofileComponent, canActivate: [LoginGuard] },
+
+	// Reset password
+	{ path: 'passwordreset', component: PasswordresetComponent, canActivate: [PasswordresetGuard]}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+	imports: [RouterModule.forRoot(routes)],
+	exports: [RouterModule]
 })
 export class AppRoutingModule { }

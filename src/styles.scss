@@ -4,3 +4,23 @@ body {
 	margin: 0;
 	padding: 0;
 }
+
+p.error {
+	margin: 0;
+	color: red;
+}
+
+
+/* Forms such as login and password reset */
+.form-group {
+	margin-bottom: 1em;
+
+	input {
+		width: 100%;
+		box-sizing: border-box;
+	}
+}
+
+.form-submit {
+	width: 100%;
+}

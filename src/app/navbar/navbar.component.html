@@ -1,7 +1,7 @@
 <div class="navbar">
 	<a href="#" routerLink="/" class="title">TTT</a>
-	<div *ngIf='userService.loggedIn; then thenBlock else elseBlock'></div>
-	<ng-template #thenBlock>
+	<div *ngIf='userService.loginState === 2; then allOptions else minimalOptions'></div>
+	<ng-template #allOptions>
 		<ul>
 			<li>
 				<a href="#" routerLink="/game">History</a>
@@ -14,11 +14,21 @@
 			</li>
 		</ul>
 	</ng-template>
-	<ng-template #elseBlock>
-		<ul>
-			<li>
-				<a href="#" routerLine="/login">Login</a>
-			</li>
-		</ul>
+	<ng-template #minimalOptions>
+		<div *ngIf='userService.loginState === 1; then logoutOnly else loginOnly'></div>
+		<ng-template #loginOnly>
+			<ul>
+				<li>
+					<a href="#" routerLink="/login">Login</a>
+				</li>
+			</ul>
+		</ng-template>
+		<ng-template #logoutOnly>
+			<ul>
+				<li>
+					<a href="#" routerLink="/logout">Logout</a>
+				</li>
+			</ul>
+		</ng-template>
 	</ng-template>
 </div>
