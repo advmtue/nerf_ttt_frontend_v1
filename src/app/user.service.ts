@@ -8,6 +8,7 @@ import { PasswordResetResponse, LoginResponse } from '../models/auth';
 })
 export class UserService {
 	public user: User | undefined = undefined;
+	public permissions: string[] = [];
 
 	private passwordResetRequired = false;
 	private authJWT = '';

@@ -4,7 +4,7 @@ import { User, UserProfile } from '../models/user';
 import { Lobby } from '../models/lobby';
 import { LoginResponse, PasswordResetResponse } from '../models/auth';
 import { UserService } from './user.service';
-
+import { API_URL } from './config';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,19 +12,30 @@ import { UserService } from './user.service';
 export class ApiService {
 
 	constructor(private http: HttpClient, private userService: UserService) {
-		// Pull user from the API
-		/*
-		const id = JSON.parse(atob(this.userService.jwt.split('.')[1])).id;
-		this.playerProfile(id)
-		.subscribe((user: User) => {
-			this.userService.user = user;
-			console.log(user);
-		});
-		*/
+		if (this.userService.loginState > 0) {
+			const id = JSON.parse(atob(this.userService.jwt.split('.')[1])).id;
+
+			this.playerProfile(id)
+			.subscribe((user: User) => {
+				this.userService.user = user;
+
+				this.groupPermissions(user.group_name)
+				.subscribe((permissions: string[]) => {
+					this.userService.permissions = permissions;
+
+					console.log(user, permissions);
+				});
+			});
+		}
 	}
 
 	getUrl(url: string) {
-		return 'http://localhost:8080/' + url;
+		return API_URL + url;
+	}
+
+	/* Get group permissions */
+	groupPermissions(group: string) {
+		return this.http.get<string[]>(this.getUrl(`group/${group}/permissions`))
 	}
 
 	/* POST /login { username: string, password: string } */
