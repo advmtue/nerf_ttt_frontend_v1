@@ -17,8 +17,9 @@ import { LobbylistComponent } from './lobbylist/lobbylist.component';
 import { PasswordresetComponent } from './passwordreset/passwordreset.component';
 import { LogoutComponent } from './logout/logout.component';
 
-import { ApiService } from './api.service';
-import { UserService } from './user.service';
+import { ApiService } from './api/api.service';
+import { UserService } from './user/user.service';
+import { SocketService } from './socket/socket.service';
 
 import { AuthInterceptor } from './auth.interceptor';
 

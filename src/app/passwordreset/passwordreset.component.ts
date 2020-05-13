@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../api.service';
-import { UserService } from '../user.service';
+import { ApiService } from '../api/api.service';
+import { UserService } from '../user/user.service';
 import { PasswordResetResponse } from '../../models/auth';
 
 @Component({

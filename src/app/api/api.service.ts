@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User, UserProfile } from '../models/user';
-import { Lobby } from '../models/lobby';
-import { LoginResponse, PasswordResetResponse } from '../models/auth';
-import { UserService } from './user.service';
-import { API_URL } from './config';
+import { User, UserProfile } from '../../models/user';
+import { Lobby } from '../../models/lobby';
+import { LoginResponse, PasswordResetResponse } from '../../models/auth';
+import { UserService } from '../user/user.service';
+import { API_URL } from '../config';
 
 @Injectable({
 	providedIn: 'root'
