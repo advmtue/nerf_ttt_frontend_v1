@@ -1,1 +1,14 @@
-<p>lobby works!</p>
+<div class="info" *ngIf="lobby">
+	<h1 class="title">Lobby: {{ lobby.name }}</h1>
+	<p class="gamemaster-name">Gamemaster: {{ lobby.owner_first_name }} {{ lobby.owner_last_name }}</p>
+</div>
+
+<div class="playerlist" *ngIf="players">
+	<h3>Players:</h3>
+	<ul *ngFor="let player of players">
+		<li>
+			<p>{{ player.first_name }} {{ player.last_name }}</p>
+		</li>
+	</ul>
+</div>
+

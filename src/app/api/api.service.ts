@@ -10,24 +10,10 @@ import { API_URL } from '../config';
 	providedIn: 'root'
 })
 export class ApiService {
-
-	constructor(private http: HttpClient, private userService: UserService) {
-		if (this.userService.loginState > 0) {
-			const id = JSON.parse(atob(this.userService.jwt.split('.')[1])).id;
-
-			this.playerProfile(id)
-			.subscribe((user: User) => {
-				this.userService.user = user;
-
-				this.groupPermissions(user.group_name)
-				.subscribe((permissions: string[]) => {
-					this.userService.permissions = permissions;
-
-					console.log(user, permissions);
-				});
-			});
-		}
-	}
+	constructor(
+		private http: HttpClient,
+		private userService: UserService
+	) {}
 
 	getUrl(url: string) {
 		return API_URL + url;
@@ -35,7 +21,7 @@ export class ApiService {
 
 	/* Get group permissions */
 	groupPermissions(group: string) {
-		return this.http.get<string[]>(this.getUrl(`group/${group}/permissions`))
+		return this.http.get<string[]>(this.getUrl(`group/${group}/permissions`));
 	}
 
 	/* POST /login { username: string, password: string } */
@@ -58,11 +44,6 @@ export class ApiService {
 		return this.http.get<UserProfile>(this.getUrl('player/' + id));
 	}
 
-	/* Get /lobby */
-	lobbyList() {
-		return this.http.get<Lobby[]>(this.getUrl('lobby'));
-	}
-
 	// Change a users password
 	changePassword(currentPassword: string, newPassword: string) {
 		const pwDetails = {currentPassword, newPassword};
@@ -71,5 +52,30 @@ export class ApiService {
 			this.getUrl('passwordreset'),
 			pwDetails
 		);
+	}
+
+	createLobby(lobbyName: string) {
+		return this.http.post<Lobby>(
+			this.getUrl('lobby'),
+			{name: lobbyName}
+		)
+	}
+
+	adminCloseLobby(lobbyId: number) {
+		return this.http.delete<Lobby>(
+			this.getUrl('lobby/' + lobbyId + '/admin')
+		)
+	}
+
+	getLobby(lobbyId: number) {
+		return this.http.get<Lobby>(
+			this.getUrl('lobby/' + lobbyId)
+		)
+	}
+
+	getLobbyPlayers(lobbyId: number) {
+		return this.http.get<User[]>(
+			this.getUrl('lobby/' + lobbyId + '/players')
+		)
 	}
 }

@@ -15,4 +15,9 @@
 			<p>View</p>
 		</a>
 	</div>
+	<div class="create-lobby form-group" *ngIf="userService.hasPermission('createLobby')">
+		<h3>Create Lobby</h3>
+		<input class="form-input" type="text" [(ngModel)]="newLobbyName"><br>
+		<button class="form-submit" (click)='createNewLobby()'>Create</button>
+	</div>
 </div>

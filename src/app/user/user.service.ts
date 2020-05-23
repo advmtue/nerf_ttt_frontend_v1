@@ -82,4 +82,12 @@ export class UserService {
 		localStorage.removeItem('password_reset');
 		this.user = undefined;
 	}
+
+	hasPermission(perm: string) {
+		if (this.permissions.indexOf('all') > -1) {
+			return true;
+		} else {
+			return this.permissions.indexOf(perm) > -1;
+		}
+	}
 }
