@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Lobby } from '../../models/lobby';
+import { Lobby, CreateLobbyResponse } from '../../models/lobby';
 import { UserService } from '../user/user.service';
 import { SocketService } from '../socket/socket.service';
 import { ApiService } from '../api/api.service';
@@ -14,6 +14,7 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 
 	public lobbies: Lobby[] = [];
 	public newLobbyName = '';
+	public createLobbyError = '';
 
 	constructor(
 		private socketService: SocketService,
@@ -25,6 +26,7 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 		this.socketService.bindRoute('getLobbyList', this.getLobbyList);
 		this.socketService.bindRoute('removeLobby', this.removeLobby);
 		this.socketService.bindRoute('addLobby', this.addLobby);
+		this.socketService.bindRoute('lobbyPlayerChange', this.lobbyPlayerChange);
 
 		this.socketService.sendMsg('getLobbyList');
 	}
@@ -36,6 +38,15 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 		this.socketService.clearRoute('getLobbyList');
 		this.socketService.clearRoute('removeLobby');
 		this.socketService.clearRoute('addLobby');
+		this.socketService.clearRoute('lobbyPlayerChange');
+	}
+
+	lobbyPlayerChange = (data: {lobby: number; change: number}) => {
+		this.lobbies.forEach(lobby => {
+			if (lobby.id === data.lobby) {
+				lobby.player_count += data.change
+			}
+		})
 	}
 
 	// Recieve the list of lobbies
@@ -59,8 +70,12 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 		}
 
 		this.apiService.createLobby(this.newLobbyName)
-		.subscribe((lobby: Lobby) => {
-			this.router.navigate([`/lobby/${lobby.id}`])
+		.subscribe((payload: CreateLobbyResponse) => {
+			if (payload.success) {
+				this.router.navigate([`/game/${payload.lobby.id}`])
+			} else {
+				this.createLobbyError = 'Failed to create lobby';
+			}
 		})
 	}
 }

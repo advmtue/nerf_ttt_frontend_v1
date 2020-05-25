@@ -4,11 +4,21 @@
 </div>
 
 <div class="playerlist" *ngIf="players">
-	<h3>Players:</h3>
+	<h3>Players ({{ players.length }})</h3>
 	<ul *ngFor="let player of players">
 		<li>
 			<p>{{ player.first_name }} {{ player.last_name }}</p>
 		</li>
 	</ul>
+</div>
+
+<div class="options" *ngIf="lobby">
+	<button *ngIf='joined' (click)='leaveLobby()'>Leave Lobby</button>
+	<button *ngIf='!joined' (click)='joinLobby()'>Join Lobby</button>
+</div>
+
+<div class="admin" *ngIf="userService.hasPermission('closeLobby')">
+	<h3>Admin</h3>
+	<button (click)='adminCloseLobby()'>Close Lobby</button>
 </div>
 

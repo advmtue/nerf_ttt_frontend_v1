@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User, UserProfile } from '../../models/user';
-import { Lobby } from '../../models/lobby';
+import { Lobby, CreateLobbyResponse } from '../../models/lobby';
 import { LoginResponse, PasswordResetResponse } from '../../models/auth';
 import { UserService } from '../user/user.service';
 import { API_URL } from '../config';
@@ -55,14 +55,14 @@ export class ApiService {
 	}
 
 	createLobby(lobbyName: string) {
-		return this.http.post<Lobby>(
+		return this.http.post<CreateLobbyResponse>(
 			this.getUrl('lobby'),
 			{name: lobbyName}
 		)
 	}
 
 	adminCloseLobby(lobbyId: number) {
-		return this.http.delete<Lobby>(
+		return this.http.delete<boolean>(
 			this.getUrl('lobby/' + lobbyId + '/admin')
 		)
 	}
@@ -77,5 +77,17 @@ export class ApiService {
 		return this.http.get<User[]>(
 			this.getUrl('lobby/' + lobbyId + '/players')
 		)
+	}
+
+	joinLobby(lobbyId: number) {
+		return this.http.get<boolean>(
+			this.getUrl(`lobby/${lobbyId}/join`)
+		);
+	}
+
+	leaveLobby(lobbyId: number) {
+		return this.http.get<boolean>(
+			this.getUrl(`lobby/${lobbyId}/leave`)
+		);
 	}
 }
