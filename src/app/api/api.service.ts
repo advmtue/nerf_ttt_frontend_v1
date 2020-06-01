@@ -67,8 +67,8 @@ export class ApiService {
 	changePassword(currentPassword: string, newPassword: string) {
 		const pwDetails = {currentPassword, newPassword};
 
-		return this.http.post<WebResponse<InitialLogin>>(
-			this.getUrl('passwordreset'),
+		return this.http.put<WebResponse<InitialLogin>>(
+			this.getUrl('login'),
 			pwDetails
 		);
 	}
