@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { UserService } from '../user/user.service';
 import { Router } from '@angular/router';
-import { LoginResponse } from '../../models/auth';
 import { WebResponse } from '../../models/response';
+import { PlayerProfile } from '../../models/player';
+import { InitialLogin } from 'src/models/auth';
 
 @Component({
 	selector: 'app-login',
@@ -52,15 +53,30 @@ export class LoginComponent implements OnInit {
 			return;
 		}
 
+		// Reset error
+		this.error = '';
+
+		// Login returns a user JWT
 		this.apiService.login(this.username, this.password)
-		.subscribe((response) => {
-			if (response.status.success) {
-				this.userService.jwt = response.data.token;
-				this.userService.passwordReset = response.data.passwordReset;
-				this.userService.performRedirects();
-			} else {
-				this.error = 'Invalid credentials';
-			}
-		});
+		.subscribe(this.getInitialLogin);	
+	}
+
+	/**
+	 * Get the InitialLogin package
+	 * 
+	 * Setups the the user service, then requests redirects
+	 */
+	getInitialLogin = (response: WebResponse<InitialLogin>) => {
+		if (!response.status.success) {
+			// Login failed
+			this.error = 'Invalid credentials';
+			return;
+		}
+
+		// Assign the login package to user service
+		this.userService.getInitialLogin(response.data);
+
+		// Perform redirects
+		this.userService.performRedirects();
 	}
 }

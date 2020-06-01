@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
 import { Lobby } from '../../models/lobby';
-import { Player } from '../../models/player';
+import { Player, LobbyPlayer } from '../../models/player';
 import { ApiService } from '../api/api.service';
 import { UserService } from '../user/user.service';
 import { SocketService } from '../socket/socket.service';
@@ -14,7 +14,7 @@ import { SocketService } from '../socket/socket.service';
 export class LobbyComponent implements OnInit {
 
 	public lobby: Lobby | undefined;
-	public players: Player[] = [];
+	public players: LobbyPlayer[] = [];
 
 	constructor(
 		public apiService: ApiService,
@@ -27,6 +27,8 @@ export class LobbyComponent implements OnInit {
 		this.socketService.bindRoute('playerJoin', this.playerJoin);
 		this.socketService.bindRoute('playerLeave', this.playerLeave);
 		this.socketService.bindRoute('lobbyClosed', this.lobbyClosed);
+		this.socketService.bindRoute('playerReady', this.playerReady);
+		this.socketService.bindRoute('playerUnready', this.playerUnready);
 	}
 
 	ngOnDestroy(): void {
@@ -66,10 +68,55 @@ export class LobbyComponent implements OnInit {
 					return;
 				}
 
+				console.log(response.data);
 				this.players = response.data;
 			});
 
 		});
+	}
+
+	get localPlayerReady() {
+		let ready = false;
+		this.players.forEach(player => {
+			if (player.id === this.userService.user.id) {
+				ready = player.ready;
+			}
+		})
+
+		return ready;
+	}
+
+	/**
+	 * Player change their ready status
+	 *
+	 * @param status 
+	 */
+	setReady(status: boolean) {
+		this.apiService.setReadyStatus(this.lobby.id, status)
+		.subscribe(response => {
+			if (response.status.success) {
+				console.log('Updated ready status');
+			} else {
+				console.log('Failed to change ready status');
+				console.log(response.status.msg);
+			}
+		});
+	}
+
+	playerReady = (playerId: number) => {
+		this.players.forEach(player => {
+			if (player.id === playerId) {
+				player.ready = true;
+			}
+		})
+	}
+
+	playerUnready = (playerId: number) => {
+		this.players.forEach(player => {
+			if (playerId === this.userService.user.id) {
+				player.ready = false;
+			}
+		})
 	}
 
 	lobbyClosed = () => {
@@ -77,12 +124,12 @@ export class LobbyComponent implements OnInit {
 	}
 
 	// @socket
-	playerJoin = (player: Player) => {
+	playerJoin = (player: LobbyPlayer) => {
 		this.players.push(player);
 	}
 
 	// @socket
-	playerLeave = (player: Player) => {
+	playerLeave = (player: LobbyPlayer) => {
 		this.players = this.players.filter(pl => {
 			return pl.id !== player.id
 		});
@@ -94,13 +141,12 @@ export class LobbyComponent implements OnInit {
 		}
 
 		let joined = false;
-
-		for (let player of this.players) {
+		this.players.forEach(player => {
 			if (player.id === this.userService.user.id) {
 				joined = true;
-				break;
 			}
-		}
+
+		})
 
 		return joined;
 	}
@@ -108,14 +154,16 @@ export class LobbyComponent implements OnInit {
 	joinLobby() {
 		this.apiService.joinLobby(this.lobby.id)
 		.subscribe(response => {
-			console.log(`Joined lobby: ${response.status.success}`);
 		});
 	}
 
 	leaveLobby() {
 		this.apiService.leaveLobby(this.lobby.id)
 		.subscribe(response => {
-			console.log(`Left Lobby: ${response.status.success}`);
+			if (!response.status.success) {
+				console.log('leaveLobby() failed');
+				console.log(response.status.msg);
+			}
 		});
 	}
 

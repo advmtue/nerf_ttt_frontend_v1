@@ -60,10 +60,16 @@ export class PasswordresetComponent implements OnInit {
 			.subscribe(response => {
 				if (!response.status.success) {
 					this.currentPasswordError = 'Current password does not match records';
-				} else {
-					this.userService.passwordReset = false;
-					this.userService.performRedirects();
+					console.log('Passwor change error...');
+					console.log(response.status.msg);
+					return;
 				}
+
+				console.log('Got initial login');
+				console.log(response.data);
+
+				this.userService.getInitialLogin(response.data);
+				this.userService.performRedirects();
 			});
 	}
 }

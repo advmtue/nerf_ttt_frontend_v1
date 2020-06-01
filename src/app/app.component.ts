@@ -19,8 +19,7 @@ export class AppComponent {
 		// If the user has some localstorage state
 		if (this.userService.loginState > 0) {
 			// Pull their use object
-			console.log('Pulling user and permissions');
-			const jwtInfo = JSON.parse(atob(this.userService.jwt.split('.')[1]));
+			const { jwtInfo } = this.userService;
 
 			// Pull the profile
 			this.apiService.playerProfile(jwtInfo.id).subscribe((response) => {
@@ -28,7 +27,7 @@ export class AppComponent {
 					console.log('Failed to pull player profile');
 				} else {
 					this.userService.user = response.data;
-					console.log('Player info: ', response.data);
+					console.log('Pulled player profile');
 				}
 			});
 
@@ -40,7 +39,7 @@ export class AppComponent {
 					console.log(response.status.msg);
 				} else {
 					this.userService.permissions = response.data;
-					console.log('User permissions: ', response.data);
+					console.log('Pulled player permissions');
 				}
 			});
 		}

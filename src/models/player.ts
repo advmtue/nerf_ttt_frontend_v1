@@ -17,3 +17,7 @@ export interface PlayerProfile extends Player {
 	stats_losses: number;
 	stats_played: number
 }
+
+export interface LobbyPlayer extends Player {
+	ready: boolean;
+}

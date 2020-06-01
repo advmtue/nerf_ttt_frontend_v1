@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Player, PlayerProfile } from '../../models/player';
+import { Player, PlayerProfile, LobbyPlayer } from '../../models/player';
 import { Lobby } from '../../models/lobby';
-import { LoginResponse } from '../../models/auth';
 import { UserService } from '../user/user.service';
 import { API_URL } from '../config';
 import { WebResponse } from '../../models/response';
+import { InitialLogin } from '../../models/auth';
 
 @Injectable({
 	providedIn: 'root'
@@ -36,7 +36,7 @@ export class ApiService {
 	login(username: string, password: string) {
 		const loginDetails = {username, password};
 
-		return this.http.post<WebResponse<LoginResponse>>(
+		return this.http.post<WebResponse<InitialLogin>>(
 			this.getUrl('login'),
 			loginDetails
 		);
@@ -54,7 +54,7 @@ export class ApiService {
 	 *
 	 * @param id Player ID
 	 */
-	playerProfile(id: string) {
+	playerProfile(id: number | string) {
 		return this.http.get<WebResponse<PlayerProfile>>(this.getUrl('player/' + id));
 	}
 
@@ -67,7 +67,7 @@ export class ApiService {
 	changePassword(currentPassword: string, newPassword: string) {
 		const pwDetails = {currentPassword, newPassword};
 
-		return this.http.post<WebResponse<boolean>>(
+		return this.http.post<WebResponse<InitialLogin>>(
 			this.getUrl('passwordreset'),
 			pwDetails
 		);
@@ -113,7 +113,7 @@ export class ApiService {
 	 * @param lobbyId Lobby ID
 	 */
 	getLobbyPlayers(lobbyId: number) {
-		return this.http.get<WebResponse<Player[]>>(
+		return this.http.get<WebResponse<LobbyPlayer[]>>(
 			this.getUrl('lobby/' + lobbyId + '/players')
 		)
 	}
@@ -128,5 +128,12 @@ export class ApiService {
 		return this.http.get<WebResponse<boolean>>(
 			this.getUrl(`lobby/${lobbyId}/leave`)
 		);
+	}
+
+	setReadyStatus(lobbyId: number, status: boolean) {
+		const urlEnd = status ? 'ready' : 'unready';
+		const endpoint = this.getUrl(`lobby/${lobbyId}/${urlEnd}`);
+
+		return this.http.get<WebResponse<boolean>>(endpoint);
 	}
 }

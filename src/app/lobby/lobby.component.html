@@ -6,18 +6,36 @@
 <div class="playerlist" *ngIf="players">
 	<h3>Players ({{ players.length }})</h3>
 	<ul *ngFor="let player of players">
-		<li>
-			<p>{{ player.first_name }} {{ player.last_name }}</p>
-		</li>
+		<li><p>
+			{{ player.first_name }} {{ player.last_name }}
+			<span *ngIf="player.ready; then ifBlock else elseBlock"></span>
+			<ng-template #ifBlock>
+				<span class="ready">Ready</span>
+			</ng-template>
+			<ng-template #elseBlock>
+				<span class="unready">Unready</span>
+			</ng-template>
+		</p></li>
 	</ul>
 </div>
 
+<!-- Join / Leave lobby -->
 <div class="options" *ngIf="lobby">
-	<button *ngIf='joined' (click)='leaveLobby()'>Leave Lobby</button>
-	<button *ngIf='!joined' (click)='joinLobby()'>Join Lobby</button>
+	<div *ngIf="joined; then joinedBlock else anonBlock"></div>
+	<ng-template #joinedBlock>
+		<!-- Part of lobby, allow leave/ready/unready -->
+		<button (click)='leaveLobby()'>Leave Lobby</button>
+		<button *ngIf="localPlayerReady" (click)="setReady(false)">Unready</button>
+		<button *ngIf="!localPlayerReady" (click)="setReady(true)">Ready up</button>
+	</ng-template>
+	<ng-template #anonBlock>
+		<!-- Not participating in lobby -->
+		<button *ngIf='!joined' (click)='joinLobby()'>Join Lobby</button>
+	</ng-template>
 </div>
 
 <div class="admin" *ngIf="userService.hasPermission('closeLobby')">
+	<!-- Admin only section -->
 	<h3>Admin</h3>
 	<button (click)='adminCloseLobby()'>Close Lobby</button>
 </div>
