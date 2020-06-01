@@ -37,6 +37,8 @@ export class LobbyComponent implements OnInit {
 		this.socketService.clearRoute('playerJoin');
 		this.socketService.clearRoute('playerLeave');
 		this.socketService.clearRoute('lobbyClosed');
+		this.socketService.clearRoute('playerReady');
+		this.socketService.clearRoute('playerUnready');
 	}
 
 	ngOnInit(): void {
@@ -113,7 +115,7 @@ export class LobbyComponent implements OnInit {
 
 	playerUnready = (playerId: number) => {
 		this.players.forEach(player => {
-			if (playerId === this.userService.user.id) {
+			if (player.id === playerId) {
 				player.ready = false;
 			}
 		})

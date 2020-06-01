@@ -15,6 +15,9 @@
 			<p>View</p>
 		</a>
 	</div>
+	<div *ngIf="lobbies.length === 0 && !this.userService.hasPermission('createLobby')">
+		<p>Waiting for an admin to start a lobby.</p>
+	</div>
 	<div class="create-lobby form-group" *ngIf="userService.hasPermission('createLobby')">
 		<h3>Create Lobby</h3>
 		<input class="form-input" type="text" [(ngModel)]="newLobbyName"><br>
