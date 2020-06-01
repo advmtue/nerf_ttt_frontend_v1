@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../models/user';
+import { Player } from '../../models/player';
 import { Router } from '@angular/router';
-import { PasswordResetResponse, LoginResponse } from '../../models/auth';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class UserService {
-	public user: User | undefined = undefined;
+	public user: Player | undefined = undefined;
 	public permissions: string[] = [];
 
 	private passwordResetRequired = false;

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User, UserProfile } from '../../models/user';
-import { Lobby, CreateLobbyResponse } from '../../models/lobby';
-import { LoginResponse, PasswordResetResponse } from '../../models/auth';
+import { Player, PlayerProfile } from '../../models/player';
+import { Lobby } from '../../models/lobby';
+import { LoginResponse } from '../../models/auth';
 import { UserService } from '../user/user.service';
 import { API_URL } from '../config';
+import { WebResponse } from '../../models/response';
 
 @Injectable({
 	providedIn: 'root'
@@ -19,74 +20,112 @@ export class ApiService {
 		return API_URL + url;
 	}
 
-	/* Get group permissions */
+	/**
+	 * Pull the permission list as a string array for a given group name 
+	 * @param group Group name
+	 */
 	groupPermissions(group: string) {
-		return this.http.get<string[]>(this.getUrl(`group/${group}/permissions`));
+		return this.http.get<WebResponse<string[]>>(this.getUrl(`group/${group}/permissions`));
 	}
 
-	/* POST /login { username: string, password: string } */
+	/**
+	 * Post login credentials for authentication
+	 * @param username Username
+	 * @param password Password
+	 */
 	login(username: string, password: string) {
 		const loginDetails = {username, password};
 
-		return this.http.post<LoginResponse>(
+		return this.http.post<WebResponse<LoginResponse>>(
 			this.getUrl('login'),
 			loginDetails
 		);
 	}
 
-	/* GET /player */
+	/**
+	 * Pull the player listing
+	 */
 	playerList() {
-		return this.http.get<User[]>(this.getUrl('player'));
+		return this.http.get<WebResponse<Player[]>>(this.getUrl('player'));
 	}
 
-	/* GET /player/:id */
+	/**
+	 * Get a player's profile
+	 *
+	 * @param id Player ID
+	 */
 	playerProfile(id: string) {
-		return this.http.get<UserProfile>(this.getUrl('player/' + id));
+		return this.http.get<WebResponse<PlayerProfile>>(this.getUrl('player/' + id));
 	}
 
-	// Change a users password
+	/**
+	 * Attempt to change password
+	 * 
+	 * @param currentPassword Current password
+	 * @param newPassword New password
+	 */
 	changePassword(currentPassword: string, newPassword: string) {
 		const pwDetails = {currentPassword, newPassword};
 
-		return this.http.post<PasswordResetResponse>(
+		return this.http.post<WebResponse<boolean>>(
 			this.getUrl('passwordreset'),
 			pwDetails
 		);
 	}
 
+	/**
+	 * Attempt to create a new lobby
+	 * 
+	 * @param lobbyName Lobby name
+	 */
 	createLobby(lobbyName: string) {
-		return this.http.post<CreateLobbyResponse>(
+		return this.http.post<WebResponse<Lobby>>(
 			this.getUrl('lobby'),
 			{name: lobbyName}
 		)
 	}
 
+	/**
+	 * As an admin, attempt to force close a lobby
+	 * 
+	 * @param lobbyId ID of corresponding lobby
+	 */
 	adminCloseLobby(lobbyId: number) {
-		return this.http.delete<boolean>(
+		return this.http.delete<WebResponse<boolean>>(
 			this.getUrl('lobby/' + lobbyId + '/admin')
 		)
 	}
 
+	/**
+	 * Pull a lobby by ID
+	 *
+	 * @param lobbyId Lobby ID
+	 */
 	getLobby(lobbyId: number) {
-		return this.http.get<Lobby>(
+		return this.http.get<WebResponse<Lobby>>(
 			this.getUrl('lobby/' + lobbyId)
 		)
 	}
 
+	/**
+	 * Pull playerlist for a lobby
+	 * 
+	 * @param lobbyId Lobby ID
+	 */
 	getLobbyPlayers(lobbyId: number) {
-		return this.http.get<User[]>(
+		return this.http.get<WebResponse<Player[]>>(
 			this.getUrl('lobby/' + lobbyId + '/players')
 		)
 	}
 
 	joinLobby(lobbyId: number) {
-		return this.http.get<boolean>(
+		return this.http.get<WebResponse<boolean>>(
 			this.getUrl(`lobby/${lobbyId}/join`)
 		);
 	}
 
 	leaveLobby(lobbyId: number) {
-		return this.http.get<boolean>(
+		return this.http.get<WebResponse<boolean>>(
 			this.getUrl(`lobby/${lobbyId}/leave`)
 		);
 	}

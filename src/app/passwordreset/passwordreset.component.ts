@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { UserService } from '../user/user.service';
-import { PasswordResetResponse } from '../../models/auth';
 
 @Component({
 	selector: 'app-passwordreset',
@@ -57,10 +56,9 @@ export class PasswordresetComponent implements OnInit {
 		}
 
 		// Attempt to reset password
-		this.apiService.changePassword(
-			this.currentPassword, this.newPassword)
-			.subscribe((response: PasswordResetResponse) => {
-				if (!response.success) {
+		this.apiService.changePassword(this.currentPassword, this.newPassword)
+			.subscribe(response => {
+				if (!response.status.success) {
 					this.currentPasswordError = 'Current password does not match records';
 				} else {
 					this.userService.passwordReset = false;

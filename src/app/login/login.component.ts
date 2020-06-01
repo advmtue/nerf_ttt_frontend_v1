@@ -3,6 +3,7 @@ import { ApiService } from '../api/api.service';
 import { UserService } from '../user/user.service';
 import { Router } from '@angular/router';
 import { LoginResponse } from '../../models/auth';
+import { WebResponse } from '../../models/response';
 
 @Component({
 	selector: 'app-login',
@@ -52,10 +53,10 @@ export class LoginComponent implements OnInit {
 		}
 
 		this.apiService.login(this.username, this.password)
-		.subscribe((response: LoginResponse) => {
-			if (response.success) {
-				this.userService.jwt = response.token;
-				this.userService.passwordReset = response.passwordReset;
+		.subscribe((response) => {
+			if (response.status.success) {
+				this.userService.jwt = response.data.token;
+				this.userService.passwordReset = response.data.passwordReset;
 				this.userService.performRedirects();
 			} else {
 				this.error = 'Invalid credentials';

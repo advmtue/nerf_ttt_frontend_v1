@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api/api.service';
-import { UserProfile } from '../../models/user';
+import { PlayerProfile } from '../../models/player';
 
 @Component({
 	selector: 'app-playerprofile',
@@ -16,9 +16,13 @@ export class PlayerprofileComponent implements OnInit {
 
 	getProfile(id: string) {
 		this.apiService.playerProfile(id)
-		.subscribe((profile: UserProfile) => {
-			this.profile = profile;
-			console.log(this.profile);
+		.subscribe(response => {
+			if (response.status.success) {
+				this.profile = response.data;
+			} else {
+				console.log('Failed to pull player profile');
+				console.log(response.status.msg);
+			}
 		});
 	}
 

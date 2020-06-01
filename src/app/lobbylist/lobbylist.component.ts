@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Lobby, CreateLobbyResponse } from '../../models/lobby';
+import { Lobby } from '../../models/lobby';
 import { UserService } from '../user/user.service';
 import { SocketService } from '../socket/socket.service';
 import { ApiService } from '../api/api.service';
@@ -70,9 +70,9 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 		}
 
 		this.apiService.createLobby(this.newLobbyName)
-		.subscribe((payload: CreateLobbyResponse) => {
-			if (payload.success) {
-				this.router.navigate([`/game/${payload.lobby.id}`])
+		.subscribe(response => {
+			if (response.status.success) {
+				this.router.navigate([`/game/${response.data.id}`])
 			} else {
 				this.createLobbyError = 'Failed to create lobby';
 			}
