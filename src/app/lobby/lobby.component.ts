@@ -15,6 +15,7 @@ export class LobbyComponent implements OnInit {
 
 	public lobby: Lobby | undefined;
 	public players: LobbyPlayer[] = [];
+	private started = false;
 
 	constructor(
 		public apiService: ApiService,
@@ -29,6 +30,7 @@ export class LobbyComponent implements OnInit {
 		this.socketService.bindRoute('lobbyClosed', this.lobbyClosed);
 		this.socketService.bindRoute('playerReady', this.playerReady);
 		this.socketService.bindRoute('playerUnready', this.playerUnready);
+		this.socketService.bindRoute('lobbyStarted', this.lobbyStarted);
 	}
 
 	ngOnDestroy(): void {
@@ -39,6 +41,7 @@ export class LobbyComponent implements OnInit {
 		this.socketService.clearRoute('lobbyClosed');
 		this.socketService.clearRoute('playerReady');
 		this.socketService.clearRoute('playerUnready');
+		this.socketService.clearRoute('lobbyStarted');
 	}
 
 	ngOnInit(): void {
@@ -86,6 +89,16 @@ export class LobbyComponent implements OnInit {
 		})
 
 		return ready;
+	}
+
+	get localPlayerIsGM() {
+		return this.userService.user.id === this.lobby.owner_id;
+	}
+
+	lobbyStarted = (gameId: number) => {
+		this.started = true;
+		console.log(`Lobby has launched into ${gameId}`)
+		this.router.navigate([`/game/${gameId}/active`]);
 	}
 
 	/**
@@ -142,15 +155,7 @@ export class LobbyComponent implements OnInit {
 			return false;
 		}
 
-		let joined = false;
-		this.players.forEach(player => {
-			if (player.id === this.userService.user.id) {
-				joined = true;
-			}
-
-		})
-
-		return joined;
+		return this.players.some(pl => pl.id === this.userService.user.id);
 	}
 
 	joinLobby() {
@@ -160,7 +165,7 @@ export class LobbyComponent implements OnInit {
 	}
 
 	leaveLobby() {
-		if (!this.joined) {
+		if (!this.joined || this.started) {
 			return;
 		}
 
@@ -183,5 +188,14 @@ export class LobbyComponent implements OnInit {
 				console.log(response.status.msg);
 			}
 		});
+	}
+
+	startLobby() {
+		console.log('Sending start request');
+
+		this.apiService.startLobby(this.lobby.id)
+		.subscribe(response => {
+			console.log(response);
+		})
 	}
 }

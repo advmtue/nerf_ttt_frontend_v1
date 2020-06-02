@@ -32,6 +32,10 @@
 		<!-- Not participating in lobby -->
 		<button *ngIf='!joined' (click)='joinLobby()'>Join Lobby</button>
 	</ng-template>
+	<div *ngIf='localPlayerIsGM'>
+		<h3>Gamemaster Options</h3>
+		<button (click)='startLobby()'>Start lobby</button>
+	</div>
 </div>
 
 <div class="admin" *ngIf="userService.hasPermission('closeLobby')">

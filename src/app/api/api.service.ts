@@ -6,6 +6,7 @@ import { UserService } from '../user/user.service';
 import { API_URL } from '../config';
 import { WebResponse } from '../../models/response';
 import { InitialLogin } from '../../models/auth';
+import { PlayerGameState } from 'src/models/game';
 
 @Injectable({
 	providedIn: 'root'
@@ -135,5 +136,17 @@ export class ApiService {
 		const endpoint = this.getUrl(`lobby/${lobbyId}/${urlEnd}`);
 
 		return this.http.get<WebResponse<boolean>>(endpoint);
+	}
+
+	startLobby(lobbyId: number) {
+		return this.http.put<WebResponse<undefined>>(
+			this.getUrl(`lobby/${lobbyId}/start`), {}
+		);
+	}
+
+	getGame(gameId: number) {
+		return this.http.get<WebResponse<PlayerGameState>>(
+			this.getUrl(`game/${gameId}`)
+		)
 	}
 }

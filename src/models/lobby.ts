@@ -3,6 +3,7 @@ export interface Lobby {
 	name: string;
 	date_created: string;
 	lobby_status: number;
+	owner_id: number;
 	owner_first_name: string;
 	owner_last_name: string;
 	owner_group: string;
