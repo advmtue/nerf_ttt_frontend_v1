@@ -160,6 +160,10 @@ export class LobbyComponent implements OnInit {
 	}
 
 	leaveLobby() {
+		if (!this.joined) {
+			return;
+		}
+
 		this.apiService.leaveLobby(this.lobby.id)
 		.subscribe(response => {
 			if (!response.status.success) {

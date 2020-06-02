@@ -44,7 +44,7 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 	lobbyPlayerChange = (data: {lobby: number; change: number}) => {
 		this.lobbies.forEach(lobby => {
 			if (lobby.id === data.lobby) {
-				lobby.player_count += data.change
+				lobby.player_count = data.change
 			}
 		})
 	}
