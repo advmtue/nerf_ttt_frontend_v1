@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PlayerGameState } from '../../models/game';
+import { Game } from '../../models/game';
 import { UserService } from '../user/user.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { UserService } from '../user/user.service';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  public game: PlayerGameState | undefined = undefined;
+  public game: Game | undefined = undefined;
 
   constructor(
     private api: ApiService,

@@ -5,7 +5,7 @@ import { Lobby, LobbyComplete } from '../../models/lobby';
 import { UserService } from '../user/user.service';
 import { API_URL } from '../config';
 import { WebResponse } from '../../models/response';
-import { PlayerGameState } from 'src/models/game';
+import { Game } from 'src/models/game';
 import { PlayerLogin } from '../../models/player';
 
 @Injectable({
@@ -140,7 +140,7 @@ export class ApiService {
 	}
 
 	getGame(gameId: number) {
-		return this.http.get<WebResponse<PlayerGameState>>(
+		return this.http.get<WebResponse<Game>>(
 			this.getUrl(`game/${gameId}`)
 		)
 	}
