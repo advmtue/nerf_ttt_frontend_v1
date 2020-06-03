@@ -11,12 +11,13 @@ export class PasswordresetGuard implements CanActivate {
 
 	canActivate(
 		next: ActivatedRouteSnapshot,
-		state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-			if (this.userService.jwtInfo) {
-				return this.userService.jwtInfo.password_reset;
-			} else {
-				return false;
-			}
+		state: RouterStateSnapshot
+	): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree
+	{
+		if (this.userService.player) {
+			return this.userService.player.password_reset === true;
+		} else {
+			return false;
 		}
-
+	}
 }

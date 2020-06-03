@@ -65,10 +65,7 @@ export class PasswordresetComponent implements OnInit {
 					return;
 				}
 
-				console.log('Got initial login');
-				console.log(response.data);
-
-				this.userService.getInitialLogin(response.data);
+				this.userService.player.password_reset = false;
 				this.userService.performRedirects();
 			});
 	}

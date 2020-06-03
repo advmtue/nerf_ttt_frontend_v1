@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PlayerGameState } from '../../models/game';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-game',
@@ -14,7 +15,8 @@ export class GameComponent implements OnInit {
   constructor(
     private api: ApiService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public user: UserService,
   ) {
     this.route.paramMap.subscribe(params => {
       this.gameId = Number(params.get('id'));

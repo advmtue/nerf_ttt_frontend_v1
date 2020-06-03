@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router'
-import { Lobby } from '../../models/lobby';
-import { Player, LobbyPlayer } from '../../models/player';
+import { LobbyComplete } from '../../models/lobby';
 import { ApiService } from '../api/api.service';
 import { UserService } from '../user/user.service';
 import { SocketService } from '../socket/socket.service';
+import { Player } from '../../models/player';
 
 @Component({
 	selector: 'app-lobby',
@@ -13,9 +13,7 @@ import { SocketService } from '../socket/socket.service';
 })
 export class LobbyComponent implements OnInit {
 
-	public lobby: Lobby | undefined;
-	public players: LobbyPlayer[] = [];
-	private started = false;
+	public lobby: LobbyComplete | undefined;
 
 	constructor(
 		public apiService: ApiService,
@@ -63,40 +61,21 @@ export class LobbyComponent implements OnInit {
 				// Join listeners for the lobby
 				this.socketService.sendMsg('joinLobby', this.lobby.id);
 			});
-
-			// Get player list
-			this.apiService.getLobbyPlayers(lobbyId)
-			.subscribe(response => {
-				if (!response.status.success) {
-					console.log('Failed to pull lobby players');
-					console.log(response.status.msg);
-					return;
-				}
-
-				console.log(response.data);
-				this.players = response.data;
-			});
-
 		});
 	}
 
 	get localPlayerReady() {
-		let ready = false;
-		this.players.forEach(player => {
-			if (player.id === this.userService.user.id) {
-				ready = player.ready;
-			}
-		})
-
-		return ready;
+		// If the local player's ID is in the ready_players array
+		return this.lobby.ready_players.some(id => id === this.userService.player.id);
 	}
 
 	get localPlayerIsGM() {
-		return this.userService.user.id === this.lobby.owner_id;
+		return this.userService.player.id === this.lobby.owner.id;
 	}
 
 	lobbyStarted = (gameId: number) => {
-		this.started = true;
+		this.lobby.status = 'IN_PROGRESS';
+
 		console.log(`Lobby has launched into ${gameId}`)
 		this.router.navigate([`/game/${gameId}/active`]);
 	}
@@ -118,54 +97,61 @@ export class LobbyComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * Set a player status to ready
+	 */
 	playerReady = (playerId: number) => {
-		this.players.forEach(player => {
-			if (player.id === playerId) {
-				player.ready = true;
-			}
-		})
+		this.lobby.ready_players.push(playerId);
 	}
 
+	/**
+	 * Set a player status to unready
+	 */
 	playerUnready = (playerId: number) => {
-		this.players.forEach(player => {
-			if (player.id === playerId) {
-				player.ready = false;
-			}
-		})
+		this.lobby.ready_players = this.lobby.ready_players.filter(
+			pl => pl !== playerId
+		);
 	}
 
 	lobbyClosed = () => {
+		this.lobby.status = 'CLOSED_BY_ADMIN';
 		this.router.navigate(['/']);
 	}
 
 	// @socket
-	playerJoin = (player: LobbyPlayer) => {
-		this.players.push(player);
+	playerJoin = (player: Player) => {
+		console.log('Player joined lobby');
+		this.lobby.players.push(player);
 	}
 
 	// @socket
-	playerLeave = (player: LobbyPlayer) => {
-		this.players = this.players.filter(pl => {
-			return pl.id !== player.id
-		});
+	playerLeave = (playerId: number) => {
+		console.log('Player left lobby');
+		this.lobby.players = this.lobby.players.filter(
+			pl => pl.id !== playerId
+		)
+		this.playerUnready(playerId);
 	}
 
 	get joined() {
-		if (!this.userService.user) {
+		if (!this.userService.player) {
 			return false;
 		}
 
-		return this.players.some(pl => pl.id === this.userService.user.id);
+		return this.lobby.players.some(pl => pl.id === this.userService.player.id);
 	}
 
 	joinLobby() {
 		this.apiService.joinLobby(this.lobby.id)
-		.subscribe(response => {
-		});
+			.subscribe(response => {
+				if (!response.status.success) {
+					console.log(response.status);
+				}
+			});
 	}
 
 	leaveLobby() {
-		if (!this.joined || this.started) {
+		if (!this.joined || this.lobby.status !== 'WAITING') {
 			return;
 		}
 
@@ -195,7 +181,13 @@ export class LobbyComponent implements OnInit {
 
 		this.apiService.startLobby(this.lobby.id)
 		.subscribe(response => {
-			console.log(response);
+			if (!response.status.success) {
+				console.log(response.status.msg);
+			}
 		})
+	}
+
+	playerIsReady(player: Player) {
+		return this.lobby.ready_players.some(pl => pl === player.id);
 	}
 }

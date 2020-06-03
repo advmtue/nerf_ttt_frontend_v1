@@ -1,23 +1,21 @@
-<div class="login-wrap">
-	<h1>Login</h1>
-	<form id="loginform">
+<h1>Login</h1>
+<form id="loginform">
 
-		<div class="form-group">
-			<label for="username">Username</label>
-			<br/>
-			<input type="text" class="form-input" [(ngModel)]="username" name="username">
-			<p class="error" *ngIf="usernameError != 'valid'">{{ usernameError }}</p>
-		</div>
+	<div class="form-group">
+		<label for="username">Username</label>
+		<br/>
+		<input type="text" class="form-input" [(ngModel)]="username" name="username">
+		<p class="error" *ngIf="usernameError != 'valid'">{{ usernameError }}</p>
+	</div>
 
-		<div class="form-group">
-			<label for="password">Password</label>
-			<br/>
-			<input type="password" class="form-input" [(ngModel)]="password" name="password">
-			<p class="error" *ngIf="passwordError != 'valid'">{{ passwordError }}</p>
-		</div>
+	<div class="form-group">
+		<label for="password">Password</label>
+		<br/>
+		<input type="password" class="form-input" [(ngModel)]="password" name="password">
+		<p class="error" *ngIf="passwordError != 'valid'">{{ passwordError }}</p>
+	</div>
 
-		<p class="error" *ngIf="error !== 'valid'">{{ error }}</p>
+	<p class="error" *ngIf="error !== 'valid'">{{ error }}</p>
 
-		<button (click)="submitLogin()" class="form-submit">Login</button>
-	</form>
-</div>
+	<button (click)="submitLogin()" class="form-submit">Login</button>
+</form>

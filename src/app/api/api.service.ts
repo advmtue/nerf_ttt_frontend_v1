@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Player, PlayerProfile, LobbyPlayer } from '../../models/player';
-import { Lobby } from '../../models/lobby';
+import { Player, PlayerProfile } from '../../models/player';
+import { Lobby, LobbyComplete } from '../../models/lobby';
 import { UserService } from '../user/user.service';
 import { API_URL } from '../config';
 import { WebResponse } from '../../models/response';
-import { InitialLogin } from '../../models/auth';
 import { PlayerGameState } from 'src/models/game';
+import { PlayerLogin } from '../../models/player';
 
 @Injectable({
 	providedIn: 'root'
@@ -22,14 +22,6 @@ export class ApiService {
 	}
 
 	/**
-	 * Pull the permission list as a string array for a given group name 
-	 * @param group Group name
-	 */
-	groupPermissions(group: string) {
-		return this.http.get<WebResponse<string[]>>(this.getUrl(`group/${group}/permissions`));
-	}
-
-	/**
 	 * Post login credentials for authentication
 	 * @param username Username
 	 * @param password Password
@@ -37,9 +29,15 @@ export class ApiService {
 	login(username: string, password: string) {
 		const loginDetails = {username, password};
 
-		return this.http.post<WebResponse<InitialLogin>>(
+		return this.http.post<WebResponse<PlayerLogin>>(
 			this.getUrl('login'),
 			loginDetails
+		);
+	}
+
+	getPlayer(playerId: number) {
+		return this.http.get<WebResponse<Player>>(
+			this.getUrl(`player/${playerId}`)
 		);
 	}
 
@@ -56,7 +54,9 @@ export class ApiService {
 	 * @param id Player ID
 	 */
 	playerProfile(id: number | string) {
-		return this.http.get<WebResponse<PlayerProfile>>(this.getUrl('player/' + id));
+		return this.http.get<WebResponse<PlayerProfile>>(
+			this.getUrl(`player/${id}/profile`)
+		);
 	}
 
 	/**
@@ -68,7 +68,7 @@ export class ApiService {
 	changePassword(currentPassword: string, newPassword: string) {
 		const pwDetails = {currentPassword, newPassword};
 
-		return this.http.put<WebResponse<InitialLogin>>(
+		return this.http.put<WebResponse<undefined>>(
 			this.getUrl('login'),
 			pwDetails
 		);
@@ -103,20 +103,15 @@ export class ApiService {
 	 * @param lobbyId Lobby ID
 	 */
 	getLobby(lobbyId: number) {
-		return this.http.get<WebResponse<Lobby>>(
+		return this.http.get<WebResponse<LobbyComplete>>(
 			this.getUrl('lobby/' + lobbyId)
 		)
 	}
 
-	/**
-	 * Pull playerlist for a lobby
-	 * 
-	 * @param lobbyId Lobby ID
-	 */
-	getLobbyPlayers(lobbyId: number) {
-		return this.http.get<WebResponse<LobbyPlayer[]>>(
-			this.getUrl('lobby/' + lobbyId + '/players')
-		)
+	whoAmI() {
+		return this.http.get<WebResponse<Player>>(
+			this.getUrl('player/self')
+		);
 	}
 
 	joinLobby(lobbyId: number) {

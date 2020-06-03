@@ -1,46 +1,44 @@
-<div class="info" *ngIf="lobby">
-	<h1 class="title">Lobby: {{ lobby.name }}</h1>
-	<p class="gamemaster-name">Gamemaster: {{ lobby.owner_first_name }} {{ lobby.owner_last_name }}</p>
-</div>
-
-<div class="playerlist" *ngIf="players">
-	<h3>Players ({{ players.length }})</h3>
-	<ul *ngFor="let player of players">
-		<li><p>
-			{{ player.first_name }} {{ player.last_name }}
-			<span *ngIf="player.ready; then ifBlock else elseBlock"></span>
-			<ng-template #ifBlock>
-				<span class="ready">Ready</span>
-			</ng-template>
-			<ng-template #elseBlock>
-				<span class="unready">Unready</span>
-			</ng-template>
-		</p></li>
-	</ul>
-</div>
-
-<!-- Join / Leave lobby -->
-<div class="options" *ngIf="lobby">
-	<div *ngIf="joined; then joinedBlock else anonBlock"></div>
-	<ng-template #joinedBlock>
-		<!-- Part of lobby, allow leave/ready/unready -->
-		<button (click)='leaveLobby()'>Leave Lobby</button>
-		<button *ngIf="localPlayerReady" (click)="setReady(false)">Unready</button>
-		<button *ngIf="!localPlayerReady" (click)="setReady(true)">Ready up</button>
-	</ng-template>
-	<ng-template #anonBlock>
-		<!-- Not participating in lobby -->
-		<button *ngIf='!joined' (click)='joinLobby()'>Join Lobby</button>
-	</ng-template>
-	<div *ngIf='localPlayerIsGM'>
-		<h3>Gamemaster Options</h3>
-		<button (click)='startLobby()'>Start lobby</button>
+<div *ngIf="lobby">
+	<div class="info">
+		<h1 class="title">Lobby: {{ lobby.name }}</h1>
+		<p class="gamemaster-name">Gamemaster: {{ lobby.owner.name }}</p>
 	</div>
-</div>
-
-<div class="admin" *ngIf="userService.hasPermission('closeLobby')">
-	<!-- Admin only section -->
-	<h3>Admin</h3>
-	<button (click)='adminCloseLobby()'>Close Lobby</button>
+	<div class="playerlist">
+		<h3>Players ({{ lobby.players.length }})</h3>
+		<ul *ngFor="let player of lobby.players">
+			<li><p>
+				{{ player.name }}
+				<span *ngIf="playerIsReady(player); then ifBlock else elseBlock"></span>
+				<ng-template #ifBlock>
+					<span class="ready">Ready</span>
+				</ng-template>
+				<ng-template #elseBlock>
+					<span class="unready">Unready</span>
+				</ng-template>
+			</p></li>
+		</ul>
+	</div>
+	<div class="options">
+		<div *ngIf="joined; then joinedBlock else anonBlock"></div>
+		<ng-template #joinedBlock>
+			<!-- Part of lobby, allow leave/ready/unready -->
+			<button (click)='leaveLobby()'>Leave Lobby</button>
+			<button *ngIf="localPlayerReady" (click)="setReady(false)">Unready</button>
+			<button *ngIf="!localPlayerReady" (click)="setReady(true)">Ready up</button>
+		</ng-template>
+		<ng-template #anonBlock>
+			<!-- Not participating in lobby -->
+			<button *ngIf='!joined' (click)='joinLobby()'>Join Lobby</button>
+		</ng-template>
+		<div *ngIf='localPlayerIsGM'>
+			<h3>Gamemaster Options</h3>
+			<button (click)='startLobby()'>Start lobby</button>
+		</div>
+	</div>
+	<div class="admin" *ngIf="userService.hasPermission('closeLobby')">
+		<!-- Admin only section -->
+		<h3>Admin</h3>
+		<button (click)='adminCloseLobby()'>Close Lobby</button>
+	</div>
 </div>
 

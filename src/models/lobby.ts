@@ -1,14 +1,21 @@
+import { Player } from './player';
+
+/**
+ * Lobby structure for basic viewing
+ */
 export interface Lobby {
 	id: number;
+	owner: Player;
 	name: string;
-	date_created: string;
-	lobby_status: number;
-	owner_id: number;
-	owner_first_name: string;
-	owner_last_name: string;
-	owner_group: string;
-	owner_group_icon_file: string;
-	owner_group_colour: string;
-	owner_group_emoji: string;
+	date_created: Date;
+	status: string;
 	player_count: number;
+}
+
+/**
+ * Lobby structure for further information
+ */
+export interface LobbyComplete extends Lobby {
+	players: Player[],
+	ready_players: number[];
 }

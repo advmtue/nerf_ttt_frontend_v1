@@ -38,8 +38,7 @@ export class PlayerlistComponent implements OnInit {
 			this.activeList = this.playerList;
 		} else {
 			this.activeList = this.playerList.filter((pl: Player) => {
-				let name = pl.first_name + pl.last_name;
-				name = name.toLowerCase();
+				let name = pl.name.toLowerCase();
 				return name.indexOf(this.searchName.toLowerCase()) > -1;
 			});
 		}

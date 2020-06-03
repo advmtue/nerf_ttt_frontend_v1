@@ -4,9 +4,9 @@
 		<div class="info">
 			<p class="title">{{ lobby.name }}</p>
 			<p class="owner">
-				by {{ lobby.owner_group_emoji }}
-				<a href="#" routerLink="/user/{{ lobby.owner_id }}" [style.color]="lobby.owner_group_colour">
-					{{ lobby.owner_first_name }} {{ lobby.owner_last_name }}
+				by 
+				<a href="#" routerLink="/user/{{ lobby.owner.id }}">
+					{{ lobby.owner.name }}
 				</a>
 			</p>
 			<p class="players">{{ lobby.player_count }} player(s)</p>
@@ -15,7 +15,7 @@
 			<p>View</p>
 		</a>
 	</div>
-	<div *ngIf="lobbies.length === 0 && !this.userService.hasPermission('createLobby')">
+	<div *ngIf="lobbies.length === 0 && !userService.hasPermission('createLobby')">
 		<p>Waiting for an admin to start a lobby.</p>
 	</div>
 	<div class="create-lobby form-group" *ngIf="userService.hasPermission('createLobby')">

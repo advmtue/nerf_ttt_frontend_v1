@@ -6,10 +6,11 @@
 <div class="container">
 	<div class="player-container" *ngFor="let player of activeList">
 		<a href="#" routerLink="/user/{{ player.id }}">
-			<p class="title" [style.color]="player.group_colour">
-			{{ player.group_emoji }}
-			{{ player.first_name }} 
-			{{ player.last_name }}
+			<p class="title">
+				<span *ngFor='let group of player.groups'>
+					{{ group.emoji }}
+				</span>
+			{{ player.name }}
 			</p>
 		</a>
 	</div>

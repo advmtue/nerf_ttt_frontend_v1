@@ -16,10 +16,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 		// If the user has a valid login state, add jwt to headers
-		if (this.userService.loginState > 0) {
+		if(this.userService.jwtString !== '') {
 			request = request.clone({
 				setHeaders: {
-					authorization: `${this.userService.jwt}`
+					authorization: `${this.userService.jwtString}`
 				}
 			});
 		}
