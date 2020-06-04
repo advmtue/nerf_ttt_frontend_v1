@@ -1,7 +1,15 @@
-span.unready {
-	color: maroon;
+table {
+	width: 100%;
 }
 
-span.ready {
-	color: green;
+td.player-status {
+	text-align: right;
+
+	span {
+		color: maroon;
+
+		&.ready {
+			color: green;
+		}
+	}
 }

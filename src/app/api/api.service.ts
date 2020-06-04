@@ -35,12 +35,6 @@ export class ApiService {
 		);
 	}
 
-	getPlayer(playerId: number) {
-		return this.http.get<WebResponse<Player>>(
-			this.getUrl(`player/${playerId}`)
-		);
-	}
-
 	/**
 	 * Pull the player listing
 	 */
@@ -53,9 +47,9 @@ export class ApiService {
 	 *
 	 * @param id Player ID
 	 */
-	playerProfile(id: number | string) {
+	getPlayerProfile(id: number | string) {
 		return this.http.get<WebResponse<PlayerProfile>>(
-			this.getUrl(`player/${id}/profile`)
+			this.getUrl(`player/${id}`)
 		);
 	}
 

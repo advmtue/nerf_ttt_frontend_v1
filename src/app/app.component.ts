@@ -24,8 +24,11 @@ export class AppComponent {
 			return;
 		}
 
+		const jwt = this.userService.jwtString;
+		const id = JSON.parse(atob(jwt.split('.')[1])).id;
+
 		// Pull the profile
-		this.apiService.whoAmI().subscribe((response) => {
+		this.apiService.getPlayerProfile(id).subscribe((response) => {
 			if (!response.status.success) {
 				console.log('Failed to pull player profile');
 			} else {

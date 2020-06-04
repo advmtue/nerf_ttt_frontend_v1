@@ -3,12 +3,7 @@
 	<div class="lobby-tile" *ngFor="let lobby of lobbies">
 		<div class="info">
 			<p class="title">{{ lobby.name }}</p>
-			<p class="owner">
-				by 
-				<a href="#" routerLink="/user/{{ lobby.owner.id }}">
-					{{ lobby.owner.name }}
-				</a>
-			</p>
+			<p class="owner">by <app-player-name [player]='lobby.owner'></app-player-name></p>
 			<p class="players">{{ lobby.player_count }} player(s)</p>
 		</div>
 		<a href="#" class="view" routerLink="/game/{{ lobby.id }}">

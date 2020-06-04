@@ -22,6 +22,7 @@ import { UserService } from './user/user.service';
 import { SocketService } from './socket/socket.service';
 
 import { AuthInterceptor } from './auth.interceptor';
+import { PlayerNameComponent } from './player-name/player-name.component';
 
 @NgModule({
 	declarations: [
@@ -36,7 +37,8 @@ import { AuthInterceptor } from './auth.interceptor';
 		NavbarComponent,
 		LobbylistComponent,
 		LogoutComponent,
-		PasswordresetComponent
+		PasswordresetComponent,
+		PlayerNameComponent
 	],
 	imports: [
 		BrowserModule,

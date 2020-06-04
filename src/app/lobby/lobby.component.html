@@ -5,18 +5,16 @@
 	</div>
 	<div class="playerlist">
 		<h3>Players ({{ lobby.players.length }})</h3>
-		<ul *ngFor="let player of lobby.players">
-			<li><p>
-				{{ player.name }}
-				<span *ngIf="playerIsReady(player); then ifBlock else elseBlock"></span>
-				<ng-template #ifBlock>
-					<span class="ready">Ready</span>
-				</ng-template>
-				<ng-template #elseBlock>
-					<span class="unready">Unready</span>
-				</ng-template>
-			</p></li>
-		</ul>
+			<table>
+				<tr *ngFor='let player of lobby.players'>
+					<td><app-player-name [player]='player'></app-player-name></td>
+					<td class="player-status">
+						<span [class.ready]='playerIsReady(player)'>
+							{{ playerIsReady(player) ? 'Ready' : 'Not Ready'}}
+						</span>
+					</td>
+				</tr>
+			</table>
 	</div>
 	<div class="options">
 		<div *ngIf="joined; then joinedBlock else anonBlock"></div>

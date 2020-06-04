@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Player } from '../../models/player';
+import { PlayerProfile } from '../../models/player';
 import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class UserService {
-	public player: Player | undefined = undefined;
+	public player: PlayerProfile | undefined = undefined;
 
 	public jwtString = '';
 

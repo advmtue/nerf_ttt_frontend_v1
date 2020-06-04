@@ -25,12 +25,16 @@ export class PlayerlistComponent implements OnInit {
 		.subscribe(response => {
 			if (response.status.success) {
 				this.playerList = response.data;
-				this.activeList = this.playerList;
+				this.activeList = this.playerList.sort(this.sortFunc);
 			} else {
 				console.log('Failed to pull player list');
 				console.log(response.status.msg);
 			}
 		});
+	}
+
+	sortFunc(a: Player, b: Player) {
+		return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
 	}
 
 	updateFilter() {
@@ -42,5 +46,7 @@ export class PlayerlistComponent implements OnInit {
 				return name.indexOf(this.searchName.toLowerCase()) > -1;
 			});
 		}
+
+		this.activeList = this.activeList.sort(this.sortFunc);
 	}
 }

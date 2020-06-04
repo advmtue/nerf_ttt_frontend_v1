@@ -10,12 +10,18 @@ import { PlayerProfile } from '../../models/player';
 })
 export class PlayerprofileComponent implements OnInit {
 
-	profile: any;
+	profile: PlayerProfile | undefined;
 
 	constructor(private route: ActivatedRoute, private apiService: ApiService) { }
 
+	get primaryEmoji() {
+		if (!this.profile) return;
+
+
+	}
+
 	getProfile(id: string) {
-		this.apiService.playerProfile(id)
+		this.apiService.getPlayerProfile(id)
 		.subscribe(response => {
 			if (response.status.success) {
 				this.profile = response.data;
@@ -28,7 +34,16 @@ export class PlayerprofileComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.route.paramMap.subscribe(params => {
-			this.getProfile(params.get('id'));
+			this.apiService.getPlayerProfile(params.get('id'))
+			.subscribe(response => {
+				if (!response.status.success) {
+					console.log(response.status.msg);
+					return;
+				}
+
+				this.profile = response.data;
+				console.log(this.profile);
+			})
 		});
 	}
 
