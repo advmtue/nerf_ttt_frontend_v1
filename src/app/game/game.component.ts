@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Game } from '../../models/game';
+import { Game, GamePlayer } from '../../models/game';
 import { UserService } from '../user/user.service';
 
 @Component({
@@ -11,6 +11,7 @@ import { UserService } from '../user/user.service';
 })
 export class GameComponent implements OnInit {
   public game: Game | undefined = undefined;
+  public localPlayer: GamePlayer | undefined;
 
   constructor(
     private api: ApiService,
@@ -27,6 +28,8 @@ export class GameComponent implements OnInit {
     this.api.getGame(id)
     .subscribe(response => {
       if (response.status.success) {
+        console.log(response.data);
+        this.localPlayer = response.data.players.find(p => p.id === this.user.player.id);
         this.game = response.data;
       }
     });
