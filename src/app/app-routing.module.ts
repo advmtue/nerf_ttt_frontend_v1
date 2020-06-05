@@ -22,7 +22,7 @@ const routes: Routes = [
 	{ path: 'login', component: LoginComponent },
 
 	// Logout
-	{ path: 'logout', component: LogoutComponent},
+	{ path: 'logout', component: LogoutComponent },
 
 	// View game history
 	{ path: 'game', component: GamehistoryComponent, canActivate: [LoginGuard] },

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { NavbarComponent } from './navbar/navbar.component';
 import { ApiService } from './api/api.service';
 import { UserService } from './user/user.service';
-import { Player } from '../models/player';
 import { Router } from '@angular/router';
 
 @Component({
@@ -32,9 +30,16 @@ export class AppComponent {
 			if (!response.status.success) {
 				console.log('Failed to pull player profile');
 			} else {
+				// Setup the userService instance
 				this.userService.player = response.data;
+
 				console.log(this.userService.player);
 				console.log('Pulled player profile');
+
+				// If password reset requried, redirect
+				if (this.userService.player.password_reset) {
+					this.router.navigate(['/passwordreset']);
+				}
 			}
 		});
 	}

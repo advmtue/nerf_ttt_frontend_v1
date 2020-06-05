@@ -18,7 +18,7 @@ export class UserService {
 	/**
 	 * Determines the logged in status of the user and
 	 * redirects accordingly:
-	 * 
+	 *
 	 * Full login: /
 	 * Password reset required: /passwordreset
 	 * No auth: /login
@@ -35,9 +35,9 @@ export class UserService {
 
 	/**
 	 * Assign JWT and perform persistence.
-	 * 
+	 *
 	 * Assigning an empty string removes jwt (effectively logout);
-	 * 
+	 *
 	 */
 	set jwt(token: string) {
 		if (token === '') {

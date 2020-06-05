@@ -3,7 +3,6 @@ import { ApiService } from '../api/api.service';
 import { UserService } from '../user/user.service';
 import { Router } from '@angular/router';
 import { WebResponse } from '../../models/response';
-import { PlayerProfile } from '../../models/player';
 import { PlayerLogin } from '../../models/player';
 
 @Component({
@@ -58,12 +57,12 @@ export class LoginComponent implements OnInit {
 
 		// Login returns a user JWT
 		this.apiService.login(this.username, this.password)
-		.subscribe(this.getLogin);	
+		.subscribe(this.getLogin);
 	}
 
 	/**
 	 * Get the InitialLogin package
-	 * 
+	 *
 	 * Setups the the user service, then requests redirects
 	 */
 	getLogin = (response: WebResponse<PlayerLogin>) => {
@@ -78,6 +77,7 @@ export class LoginComponent implements OnInit {
 		this.userService.player = response.data.player;
 
 		// Perform redirects
+		console.log('Requesting user service perform redirects');
 		this.userService.performRedirects();
 	}
 }
