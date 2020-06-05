@@ -1,12 +1,11 @@
 import { Player } from './player';
+import * as Role from './role';
 
 export interface GameConfig {
-	priest: boolean;
-	madman: boolean;
 }
 
 export interface GamePlayer extends Player {
-	role: string;
+	role: Role.Any;
 	alive: boolean;
 }
 
