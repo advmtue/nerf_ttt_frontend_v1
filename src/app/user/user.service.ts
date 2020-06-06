@@ -14,7 +14,10 @@ export class UserService {
 	constructor(private router: Router) {
 		// Setup auth tokens if they exist
 		this.jwtString = localStorage.getItem('auth_token') || '';
-		this.playerId = JSON.parse(atob(this.jwtString.split('.')[1])).id || -1;
+
+		if (this.jwtString !== '') {
+			this.playerId = JSON.parse(atob(this.jwtString.split('.')[1])).id || -1;
+		}
 	}
 
 	/**
