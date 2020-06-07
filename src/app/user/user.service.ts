@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
-import { PlayerProfile } from '../../models/player';
-import { Router } from '@angular/router';
+import { PlayerProfile, PlayerLogin } from '../../models/player';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class UserService {
+	// A pulled PlayerProfile from the server
 	public player: PlayerProfile | undefined = undefined;
-	public playerId: number;
 
+	// PlayerId extracted from any saved JWT
+	public playerId: number = -1;
+
+	// JWT saved in localStorage
 	public jwtString = '';
 
-	constructor(private router: Router) {
+	constructor() {
 		// Setup auth tokens if they exist
 		this.jwtString = localStorage.getItem('auth_token') || '';
 
@@ -20,22 +23,12 @@ export class UserService {
 		}
 	}
 
-	/**
-	 * Determines the logged in status of the user and
-	 * redirects accordingly:
-	 *
-	 * Full login: /
-	 * Password reset required: /passwordreset
-	 * No auth: /login
-	 */
-	performRedirects(): void {
-		if (!this.player) {
-			this.router.navigate(['/login']);
-		} else if (this.player.password_reset) {
-			this.router.navigate(['/passwordreset']);
-		} else {
-			this.router.navigate(['/']);
-		}
+	getLoginPack(pack: PlayerLogin) {
+		// Assign the player profile
+		this.player = pack.player;
+
+		// Persist the token
+		this.jwt = pack.token;
 	}
 
 	/**
@@ -62,25 +55,32 @@ export class UserService {
 	}
 
 	/**
-	 * Clears the user service and redirect to /login
+	 * Resets the userService to a default 'no-auth' state
 	 */
 	logout() {
 		localStorage.removeItem('auth_token');
 		this.jwtString = '';
 		this.player = undefined;
-		this.performRedirects();
 	}
 
-	get loginState() {
-		if (this.player) {
-			if (this.player.password_reset) {
-				return 1
-			}
-
-			return 2
+	/**
+	 * Define different auth levels
+	 *
+	 * NONE = No authentication
+	 * PASSWORD_RESET = Password reset required
+	 * AUTHED = Full authentication
+	 * LOADING = Awaiting auth confirmation
+	 */
+	get authLevel(): string {
+		if (!this.player && this.jwtString !== '') {
+			return 'LOADING';
+		} else if (!this.player) {
+			return 'NONE';
+		} else if (this.player.password_reset) {
+			return 'PASSWORD_RESET';
+		} else {
+			return 'AUTHED';
 		}
-
-		return 0
 	}
 
 	/**

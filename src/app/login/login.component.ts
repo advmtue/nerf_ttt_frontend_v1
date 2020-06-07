@@ -74,10 +74,20 @@ export class LoginComponent implements OnInit {
 
 		// Assign the JWT to the user service
 		this.userService.jwt = response.data.token;
+
+		// Assign the player to the user service
 		this.userService.player = response.data.player;
 
-		// Perform redirects
-		console.log('Requesting user service perform redirects');
-		this.userService.performRedirects();
+		// Determine the login state
+		if (this.userService.authLevel === 'AUTHED') {
+			// Navigate home
+			console.log('Successful authentication. Redirecting home');
+			this.router.navigate(['/']);
+		} else {
+			// Redirect to the password reset page
+			console.log('Successful authentication. Password reset required');
+			this.router.navigate(['/passwordreset']);
+		}
+
 	}
 }

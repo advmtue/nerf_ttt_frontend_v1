@@ -1,6 +1,6 @@
 <div class="navbar">
 	<a href="#" routerLink="/" class="title">TTT</a>
-	<div *ngIf='userService.loginState === 2; then allOptions else minimalOptions'></div>
+	<div *ngIf='userService.authLevel === "AUTHED"; then allOptions else minimalOptions'></div>
 	<ng-template #allOptions>
 		<ul>
 			<li>
@@ -15,7 +15,7 @@
 		</ul>
 	</ng-template>
 	<ng-template #minimalOptions>
-		<div *ngIf='userService.loginState === 1; then logoutOnly else loginOnly'></div>
+		<div *ngIf='userService.authLevel === "PASSWORD_RESET"; then logoutOnly else loginOnly'></div>
 		<ng-template #loginOnly>
 			<ul>
 				<li>

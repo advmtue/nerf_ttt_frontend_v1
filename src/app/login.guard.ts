@@ -12,7 +12,8 @@ export class LoginGuard implements CanActivate {
 	canActivate(
 		next: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-			return this.userService.jwtString !== undefined;
+			const authLevel = this.userService.authLevel;
+			return authLevel === 'AUTHED' || authLevel === 'LOADING';
 		}
 
 }

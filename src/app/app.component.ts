@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ApiService } from './api/api.service';
 import { UserService } from './user/user.service';
 import { Router } from '@angular/router';
+import { WebResponse } from '../models/response';
+import { PlayerProfile } from '../models/player';
 
 @Component({
 	selector: 'app-root',
@@ -10,37 +12,53 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
 	title = 'ttt-frontend';
+	public loaded = false;
 
 	constructor(
-		private apiService: ApiService,
-		private userService: UserService,
+		private api: ApiService,
+		private user: UserService,
 		private router: Router,
+
 	) {
-		// Do nothing if no localStorage state
-		if (this.userService.jwtString === '') {
+		this.checkRedirects();
+	}
+
+	checkRedirects() {
+		const authLevel = this.user.authLevel;
+		console.log(authLevel);
+		if (authLevel === 'LOADING') {
+			// Make a request for the profile
+			this.api.getPlayerProfile(this.user.playerId)
+			.subscribe(this.onGetProfile);
+		} else if (authLevel === 'NONE') {
+			// Redirect to login if necessary
+			if (this.router.url !== '/login') {
+				this.router.navigate(['/login']);
+				this.loaded = true;
+			}
+		} else if (authLevel === 'PASSWORD_RESET') {
+			// Redirect to passwordreset if necessary
+			if (this.router.url !== '/passwordreset') {
+				this.router.navigate(['/passwordreset']);
+				this.loaded = true;
+			}
+		} else {
+			this.loaded = true;
+		}
+	}
+
+	// Response for player login
+	onGetProfile = (pack: WebResponse<PlayerProfile>) => {
+		if (!pack.status.success) {
+			console.log('Failed to authenticate.');
+			this.user.logout();
 			this.router.navigate(['/login']);
 			return;
 		}
 
-		const jwt = this.userService.jwtString;
-		const id = JSON.parse(atob(jwt.split('.')[1])).id;
+		// Assign the login pack to the user service
+		this.user.player = pack.data;
 
-		// Pull the profile
-		this.apiService.getPlayerProfile(id).subscribe((response) => {
-			if (!response.status.success) {
-				console.log('Failed to pull player profile');
-			} else {
-				// Setup the userService instance
-				this.userService.player = response.data;
-
-				console.log(this.userService.player);
-				console.log('Pulled player profile');
-
-				// If password reset requried, redirect
-				if (this.userService.player.password_reset) {
-					this.router.navigate(['/passwordreset']);
-				}
-			}
-		});
+		this.checkRedirects();
 	}
 }

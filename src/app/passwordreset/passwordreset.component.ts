@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { UserService } from '../user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-passwordreset',
@@ -19,7 +20,11 @@ export class PasswordresetComponent implements OnInit {
 	public confirmPassword = '';
 	public confirmPasswordError = 'valid';
 
-	constructor(private apiService: ApiService, private userService: UserService) { }
+	constructor(
+		private api: ApiService,
+		private user: UserService,
+		private router: Router,
+	) { }
 
 	ngOnInit(): void {
 	}
@@ -56,7 +61,7 @@ export class PasswordresetComponent implements OnInit {
 		}
 
 		// Attempt to reset password
-		this.apiService.changePassword(this.currentPassword, this.newPassword)
+		this.api.changePassword(this.currentPassword, this.newPassword)
 			.subscribe(response => {
 				if (!response.status.success) {
 					this.currentPasswordError = 'Current password does not match records';
@@ -65,8 +70,11 @@ export class PasswordresetComponent implements OnInit {
 					return;
 				}
 
-				this.userService.player.password_reset = false;
-				this.userService.performRedirects();
+				this.user.player.password_reset = false;
+
+				// Redirect to the homepage
+				// TODO: Redirect to originally requested page?
+				this.router.navigate(['/']);
 			});
 	}
 }
