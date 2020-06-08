@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UserService } from './user/user.service';
+import { AuthService } from './auth/auth.service';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class LoginGuard implements CanActivate {
-	constructor(private userService: UserService) { }
+	constructor (
+		private auth: AuthService,
+	) { }
 
-	canActivate(
-		next: ActivatedRouteSnapshot,
-		state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-			const authLevel = this.userService.authLevel;
-			return authLevel === 'AUTHED' || authLevel === 'LOADING';
-		}
-
+	canActivate(): Observable<boolean> {
+		return new Observable<boolean>((observer) => {
+			this.auth.authStatus.subscribe(level => {
+				if (level === 'AUTH_FULL') {
+					observer.next(true);
+					observer.complete();
+				}
+	 		});
+		});
+	}
 }

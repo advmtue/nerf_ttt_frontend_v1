@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api/api.service';
-import { UserService } from '../user/user.service';
-import { Router } from '@angular/router';
 import { WebResponse } from '../../models/response';
 import { PlayerLogin } from '../../models/player';
+import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-login',
@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
 
 	constructor(
 		private apiService: ApiService,
-		private userService: UserService,
-		private router: Router
+		private auth: AuthService,
+		private router: Router,
 	) { }
 
 	ngOnInit(): void {
@@ -72,22 +72,7 @@ export class LoginComponent implements OnInit {
 			return;
 		}
 
-		// Assign the JWT to the user service
-		this.userService.jwt = response.data.token;
-
-		// Assign the player to the user service
-		this.userService.player = response.data.player;
-
-		// Determine the login state
-		if (this.userService.authLevel === 'AUTHED') {
-			// Navigate home
-			console.log('Successful authentication. Redirecting home');
-			this.router.navigate(['/']);
-		} else {
-			// Redirect to the password reset page
-			console.log('Successful authentication. Password reset required');
-			this.router.navigate(['/passwordreset']);
-		}
-
+		this.auth.auth(response.data);
+		this.router.navigate(['/']);
 	}
 }

@@ -20,6 +20,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { ApiService } from './api/api.service';
 import { UserService } from './user/user.service';
 import { SocketService } from './socket/socket.service';
+import { AuthService } from './auth/auth.service';
+import { TokenService } from './token/token.service';
 
 import { AuthInterceptor } from './auth.interceptor';
 import { PlayerNameComponent } from './player-name/player-name.component';
@@ -49,6 +51,9 @@ import { PlayerNameComponent } from './player-name/player-name.component';
 	providers: [
 		ApiService,
 		UserService,
+		SocketService,
+		AuthService,
+		TokenService,
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptor,

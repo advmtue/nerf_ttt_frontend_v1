@@ -59,7 +59,7 @@ export class GameComponent implements OnInit {
 
   assignGameState(game: Game) {
 	this.game = game;
-        this.localPlayer = game.players.find(p => p.id === this.user.playerId);
+        this.localPlayer = game.players.find(p => p.id === this.user.player.id);
 	this.associates = game.players.filter(pl => {
 		return pl.role !== 'INNOCENT' && pl.id !== this.localPlayer.id
 	});

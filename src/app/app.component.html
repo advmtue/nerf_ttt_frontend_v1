@@ -1,17 +1,7 @@
-<div *ngIf="loaded; then ready else loading"></div>
+<div class="container">
+	<app-navbar></app-navbar>
+</div>
 
-<ng-template #ready>
-	<div class="container">
-		<app-navbar></app-navbar>
-	</div>
-
-	<div class="content">
-		<router-outlet></router-outlet>
-	</div>
-</ng-template>
-
-<ng-template #loading>
-	<div class="loading">
-		<p>Nerf TTT is loading</p>
-	</div>
-</ng-template>
+<div class="content">
+	<router-outlet></router-outlet>
+</div>

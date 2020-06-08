@@ -1,41 +1,49 @@
+import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { API_URL } from '../config';
-import { UserService } from '../user/user.service';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class SocketService {
 	public io: SocketIOClient.Socket;
-	public authed = false;
 
-	constructor(private userService: UserService) {
+	public connectionStatus: BehaviorSubject<string>;
+
+	constructor() {
+		this.connectionStatus = new BehaviorSubject<string>('SOCKET_NONE');
+
 		this.io = io(API_URL);
-		this.io.on('connect', this.connected)
-		this.io.on('auth', this.auth);
-		this.io.on('debug', console.log);
+
+		this.io.on('connect', this.connected);
+		this.io.on('auth', this.authed);
+		this.io.on('disconnect', this.disconnected);
 	}
 
-	/**
-	 * On connection, attempt to auth the websocket
-	 */
+
+	// socket-event :: disconnect
+	disconnected = () => {
+		this.connectionStatus.next('SOCKET_NONE');
+	}
+
+	// socket-event :: connect
 	connected = () => {
-		this.io.emit('auth', this.userService.jwtString)
+		this.connectionStatus.next('SOCKET_CONNECT');
+	}
+
+	// socket-event :: auth
+	authed = () => {
+		this.connectionStatus.next('SOCKET_READY');
 	}
 
 	/**
-	 * Server response from auth
+	 * Send an auth message to the server.
 	 *
-	 * @param status Auth status
+	 * @param token Auth Token
 	 */
-	auth = (status: boolean) => {
-		if (status) {
-			console.log('Successfully authed websocket');
-			this.authed = true;
-		} else {
-			console.log('Failed to auth websocket');
-		}
+	auth(token: string) {
+		this.io.emit('auth', token);
 	}
 
 	/**
@@ -65,5 +73,13 @@ export class SocketService {
 	 */
 	sendMsg(name: string, data: any = {}) {
 		this.io.emit(name, data);
+	}
+
+	/**
+	 * Perform cleanup of authenticated sockets
+	 */
+	logout() {
+		this.io.disconnect();
+		this.io.connect();
 	}
 }

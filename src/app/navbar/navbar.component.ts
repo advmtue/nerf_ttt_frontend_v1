@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../user/user.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
 	selector: 'app-navbar',
@@ -7,8 +7,20 @@ import { UserService } from '../user/user.service';
 	styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+	public authLevel: string = 'AUTH_ZERO';
 
-	constructor(public userService: UserService) {
+	constructor(
+		public auth: AuthService
+	) {
+		// Subscribe to auth updates
+		this.auth.authStatus.subscribe((level) => {
+			if (
+				level === 'AUTH_PASSWORD_RESET' ||
+				level === 'AUTH_FULL' ||
+				level === 'AUTH_NONE' ) {
+				this.authLevel = level;
+			}
+		});
 	}
 
 	ngOnInit(): void {

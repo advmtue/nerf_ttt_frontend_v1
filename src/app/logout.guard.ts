@@ -6,7 +6,7 @@ import { AuthService } from './auth/auth.service';
 @Injectable({
 	providedIn: 'root'
 })
-export class PasswordresetGuard implements CanActivate {
+export class LogoutGuard implements CanActivate {
 	constructor (
 		private auth: AuthService
 	) {}
@@ -14,7 +14,7 @@ export class PasswordresetGuard implements CanActivate {
 	canActivate(): Observable<boolean> {
 		return new Observable(observer => {
 			this.auth.authStatus.subscribe(level => {
-				if (level === 'AUTH_PASSWORD_RESET') {
+				if (level === 'AUTH_NONE') {
 					observer.next(true);
 					observer.complete();
 				}

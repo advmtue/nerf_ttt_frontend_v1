@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Player, PlayerProfile } from '../../models/player';
 import { Lobby, LobbyComplete } from '../../models/lobby';
-import { UserService } from '../user/user.service';
 import { API_URL } from '../config';
 import { WebResponse } from '../../models/response';
 import { Game } from 'src/models/game';
@@ -14,7 +13,6 @@ import { PlayerLogin } from '../../models/player';
 export class ApiService {
 	constructor(
 		private http: HttpClient,
-		private userService: UserService
 	) {}
 
 	getUrl(url: string) {
@@ -32,6 +30,17 @@ export class ApiService {
 		return this.http.post<WebResponse<PlayerLogin>>(
 			this.getUrl('login'),
 			loginDetails
+		);
+	}
+
+	/**
+	 * Exchange a token for PlayerLogin
+	 * @param User auth token
+	 */
+	authenticate(token: string) {
+		return this.http.post<WebResponse<PlayerLogin>>(
+			this.getUrl('authenticate'),
+			{token: token}
 		);
 	}
 

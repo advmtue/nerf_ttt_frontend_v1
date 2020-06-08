@@ -9,13 +9,11 @@ import { Player } from '../../models/player';
 })
 export class PlayerlistComponent implements OnInit {
 	private playerList: Player[];
-	private filterList: Player[];
 	public activeList: Player[];
 	public searchName: string;
 
 	constructor(private apiService: ApiService) {
 		this.playerList = [];
-		this.filterList = [];
 		this.activeList = [];
 		this.searchName = '';
 	}

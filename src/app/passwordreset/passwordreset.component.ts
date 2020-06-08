@@ -71,6 +71,7 @@ export class PasswordresetComponent implements OnInit {
 				}
 
 				this.user.player.password_reset = false;
+				this.user.setPlayer(this.user.player);
 
 				// Redirect to the homepage
 				// TODO: Redirect to originally requested page?
