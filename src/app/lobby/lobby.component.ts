@@ -1,193 +1,125 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router'
-import { LobbyComplete } from '../../models/lobby';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { ApiService } from '../api/api.service';
 import { UserService } from '../user/user.service';
 import { SocketService } from '../socket/socket.service';
-import { Player } from '../../models/player';
+import { Game, GamePlayer } from '../../models/game';
+import { WebResponse } from '../../models/response';
 
 @Component({
 	selector: 'app-lobby',
 	templateUrl: './lobby.component.html',
 	styleUrls: ['./lobby.component.scss']
 })
-export class LobbyComponent implements OnInit {
-
-	public lobby: LobbyComplete | undefined;
+export class LobbyComponent implements OnInit, OnDestroy {
+	@Input('game') game: Game;
 
 	constructor(
-		public apiService: ApiService,
-		private route: ActivatedRoute,
-		private router: Router,
-		public userService: UserService,
-		public socketService: SocketService
+		public api: ApiService,
+		public user: UserService,
+		public socket: SocketService,
+		public router: Router,
 	) {
 		// Add socket routes
-		this.socketService.bindRoute('playerJoin', this.playerJoin);
-		this.socketService.bindRoute('playerLeave', this.playerLeave);
-		this.socketService.bindRoute('lobbyClosed', this.lobbyClosed);
-		this.socketService.bindRoute('playerReady', this.playerReady);
-		this.socketService.bindRoute('playerUnready', this.playerUnready);
-		this.socketService.bindRoute('lobbyStarted', this.lobbyStarted);
+
+		socket.io.on('playerJoin', this.playerJoin.bind(this));
+		socket.io.on('playerLeave', this.playerLeave.bind(this));
+		socket.io.on('playerReady', this.playerReady.bind(this));
+		socket.io.on('playerUnready', this.playerUnready.bind(this));
+		socket.io.on('gameCloseAdmin', this.gameClose.bind(this));
+		socket.io.on('gameCloseOwner', this.gameClose.bind(this));
 	}
 
 	ngOnDestroy(): void {
-		this.leaveLobby();
-
-		this.socketService.clearRoute('playerJoin');
-		this.socketService.clearRoute('playerLeave');
-		this.socketService.clearRoute('lobbyClosed');
-		this.socketService.clearRoute('playerReady');
-		this.socketService.clearRoute('playerUnready');
-		this.socketService.clearRoute('lobbyStarted');
+		this.socket.io.off('playerJoin');
+		this.socket.io.off('playerLeave');
+		this.socket.io.off('playerReady');
+		this.socket.io.off('playerUnready');
+		this.socket.io.off('gameCloseAdmin');
+		this.socket.io.off('gameCloseOwner');
 	}
 
-	ngOnInit(): void {
-		// Get the lobby with matching id
-		this.route.paramMap.subscribe(params => {
-			const lobbyId = Number(params.get('id'));
+	ngOnInit(): void {}
 
-			// Get lobby info
-			this.apiService.getLobby(lobbyId)
-			.subscribe((response) => {
-				if (!response.status.success) {
-					console.log('Failed to pull lobby information');
-					console.log(response.status.msg);
-					return;
-				}
-
-				// Save lobby
-				this.lobby = response.data;
-				// Join listeners for the lobby
-				this.socketService.sendMsg('joinLobby', this.lobby.id);
-			});
-		});
-	}
-
-	get localPlayerReady() {
-		// If the local player's ID is in the ready_players array
-		return this.lobby.ready_players.some(id => id === this.userService.player.id);
-	}
-
-	get localPlayerIsGM() {
-		return this.userService.player.id === this.lobby.owner.id;
-	}
-
-	lobbyStarted = (gameId: number) => {
-		this.lobby.status = 'IN_PROGRESS';
-
-		console.log(`Lobby has launched into ${gameId}`)
-		this.router.navigate([`/game/${gameId}/active`]);
-	}
-
-	/**
-	 * Player change their ready status
-	 *
-	 * @param status 
-	 */
-	setReady(status: boolean) {
-		this.apiService.setReadyStatus(this.lobby.id, status)
-		.subscribe(response => {
-			if (response.status.success) {
-				console.log('Updated ready status');
-			} else {
-				console.log('Failed to change ready status');
-				console.log(response.status.msg);
-			}
-		});
-	}
-
-	/**
-	 * Set a player status to ready
-	 */
-	playerReady = (playerId: number) => {
-		this.lobby.ready_players.push(playerId);
-	}
-
-	/**
-	 * Set a player status to unready
-	 */
-	playerUnready = (playerId: number) => {
-		this.lobby.ready_players = this.lobby.ready_players.filter(
-			pl => pl !== playerId
-		);
-	}
-
-	lobbyClosed = () => {
-		this.lobby.status = 'CLOSED_BY_ADMIN';
+	gameClose() {
+		console.log('Got gameCloseAdmin');
 		this.router.navigate(['/']);
 	}
 
-	// @socket
-	playerJoin = (player: Player) => {
-		console.log('Player joined lobby');
-		this.lobby.players.push(player);
+	playerJoin(player: GamePlayer) {
+		this.game.players.push(player);
 	}
 
-	// @socket
-	playerLeave = (playerId: number) => {
-		console.log('Player left lobby');
-		this.lobby.players = this.lobby.players.filter(
-			pl => pl.id !== playerId
-		)
-		this.playerUnready(playerId);
+	playerLeave(playerId: number) {
+		this.game.players = this.game.players.filter(pl => pl.id !== playerId);
 	}
 
-	get joined() {
-		if (!this.userService.player) {
+	playerReady(playerId: number) {
+		this.game.players.find(pl => pl.id === playerId).ready = true;
+	}
+
+	playerUnready(playerId: number) {
+		this.game.players.find(pl => pl.id === playerId).ready = false;
+	}
+
+	// Console log any web response errors
+	checkWebResponse(response: WebResponse<boolean>) {
+		if (!response.status.success) {
+			console.log(response);
+		}
+	}
+
+	// Join / Leave the game
+	setJoined(joined: boolean = true) {
+		if (joined) {
+			this.api.joinGame(this.game.id).subscribe(this.checkWebResponse);
+		} else {
+			this.api.leaveGame(this.game.id).subscribe(this.checkWebResponse);
+		}
+	}
+
+
+	// Ready / Unready
+	setReady(ready: boolean = true) {
+		if (ready) {
+			this.api.readyUp(this.game.id).subscribe(this.checkWebResponse);
+		} else {
+			this.api.unready(this.game.id).subscribe(this.checkWebResponse);
+		}
+	}
+
+	// Close lobby as administrator
+	adminCloseLobby() {
+		this.api.adminCloseGame(this.game.id).subscribe(this.checkWebResponse);
+	}
+
+	// Owner start lobby
+	startLobby() {
+		// Hello world!
+		this.api.startLobby(this.game.id).subscribe(this.checkWebResponse);
+	}
+
+	// Determine if localPlayer has joined the lobby
+	get localPlayerJoined(): boolean {
+		return this.localPlayer !== null;
+	}
+
+	// Get the local player if they are in the game, else null
+	get localPlayer(): GamePlayer | null {
+		return this.game.players.filter(pl => pl.id === this.user.player.id)[0] || null;
+	}
+
+	// Determine if localPlayer is ready
+	get localPlayerReady() {
+		if (this.localPlayer === null) {
 			return false;
 		}
-
-		return this.lobby.players.some(pl => pl.id === this.userService.player.id);
+		return this.localPlayer.ready;
 	}
 
-	joinLobby() {
-		this.apiService.joinLobby(this.lobby.id)
-			.subscribe(response => {
-				if (!response.status.success) {
-					console.log(response.status);
-				}
-			});
+	// Determine if localPlayer is Game master
+	get localPlayerIsGM() {
+		return this.game.owner.id === this.user.player.id;
 	}
 
-	leaveLobby() {
-		if (!this.joined || this.lobby.status !== 'WAITING') {
-			return;
-		}
-
-		this.apiService.leaveLobby(this.lobby.id)
-		.subscribe(response => {
-			if (!response.status.success) {
-				console.log('leaveLobby() failed');
-				console.log(response.status.msg);
-			}
-		});
-	}
-
-	adminCloseLobby() {
-		this.apiService.adminCloseLobby(this.lobby.id)
-		.subscribe(response => {
-			if (response.status.success) {
-				this.router.navigate(['/']);
-			} else {
-				console.log('Failed to close lobby');
-				console.log(response.status.msg);
-			}
-		});
-	}
-
-	startLobby() {
-		console.log('Sending start request');
-
-		this.apiService.startLobby(this.lobby.id)
-		.subscribe(response => {
-			if (!response.status.success) {
-				console.log(response.status.msg);
-			}
-		})
-	}
-
-	playerIsReady(player: Player) {
-		return this.lobby.ready_players.some(pl => pl === player.id);
-	}
 }

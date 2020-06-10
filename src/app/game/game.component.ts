@@ -65,8 +65,9 @@ export class GameComponent implements OnInit {
 	});
 
 	// Setup seconds until next game phase
-	game.next_time = new Date(game.next_time);
-	this.secondsLeft = Math.floor((game.next_time.valueOf() - Date.now()) / 1000);
+	// game.next_time = new Date(game.next_time);
+	// this.secondsLeft = Math.floor((game.next_time.valueOf() - Date.now()) / 1000);
+	this.secondsLeft = 100;
 	this.startTimer();
 
 	// Ready to display

@@ -73,6 +73,7 @@ export class LoginComponent implements OnInit {
 		}
 
 		this.auth.auth(response.data);
+
 		this.router.navigate(['/']);
 	}
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Player, PlayerProfile } from '../../models/player';
-import { Lobby, LobbyComplete } from '../../models/lobby';
 import { API_URL } from '../config';
 import { WebResponse } from '../../models/response';
 import { Game } from 'src/models/game';
@@ -30,6 +29,12 @@ export class ApiService {
 		return this.http.post<WebResponse<PlayerLogin>>(
 			this.getUrl('login'),
 			loginDetails
+		);
+	}
+
+	startLobby(gameId: number) {
+		return this.http.put<WebResponse<undefined>>(
+			this.getUrl(`game/${gameId}/start`), {}
 		);
 	}
 
@@ -64,7 +69,7 @@ export class ApiService {
 
 	/**
 	 * Attempt to change password
-	 * 
+	 *
 	 * @param currentPassword Current password
 	 * @param newPassword New password
 	 */
@@ -78,36 +83,36 @@ export class ApiService {
 	}
 
 	/**
-	 * Attempt to create a new lobby
-	 * 
-	 * @param lobbyName Lobby name
-	 */
-	createLobby(lobbyName: string) {
-		return this.http.post<WebResponse<Lobby>>(
-			this.getUrl('lobby'),
-			{name: lobbyName}
-		)
-	}
-
-	/**
-	 * As an admin, attempt to force close a lobby
-	 * 
-	 * @param lobbyId ID of corresponding lobby
-	 */
-	adminCloseLobby(lobbyId: number) {
-		return this.http.delete<WebResponse<boolean>>(
-			this.getUrl('lobby/' + lobbyId + '/admin')
-		)
-	}
-
-	/**
-	 * Pull a lobby by ID
+	 * Attempt to create a new game (in lobby state)
 	 *
-	 * @param lobbyId Lobby ID
+	 * @param name Game name
 	 */
-	getLobby(lobbyId: number) {
-		return this.http.get<WebResponse<LobbyComplete>>(
-			this.getUrl('lobby/' + lobbyId)
+	createGame(name: string) {
+		return this.http.post<WebResponse<Game>>(
+			this.getUrl('game'),
+			{name: name}
+		)
+	}
+
+	/**
+	 * As an admin, attempt to force close a game
+	 *
+	 * @param gameId Game ID
+	 */
+	adminCloseGame(gameId: number) {
+		return this.http.delete<WebResponse<boolean>>(
+			this.getUrl('game/' + gameId + '/admin')
+		)
+	}
+
+	/**
+	 * Pull a game by ID
+	 *
+	 * @param gameId Game ID
+	 */
+	getGame(gameId: number) {
+		return this.http.get<WebResponse<Game>>(
+			this.getUrl('game/' + gameId)
 		)
 	}
 
@@ -117,34 +122,32 @@ export class ApiService {
 		);
 	}
 
-	joinLobby(lobbyId: number) {
-		return this.http.get<WebResponse<boolean>>(
-			this.getUrl(`lobby/${lobbyId}/join`)
+	/* Join a game */
+	joinGame(gameId: number) {
+		return this.http.put<WebResponse<boolean>>(
+			this.getUrl(`game/${gameId}/join`),
+			{}
 		);
 	}
 
-	leaveLobby(lobbyId: number) {
-		return this.http.get<WebResponse<boolean>>(
-			this.getUrl(`lobby/${lobbyId}/leave`)
+	// Leavea  game
+	leaveGame(gameId: number) {
+		return this.http.put<WebResponse<boolean>>(
+			this.getUrl(`game/${gameId}/leave`), {}
 		);
 	}
 
-	setReadyStatus(lobbyId: number, status: boolean) {
-		const urlEnd = status ? 'ready' : 'unready';
-		const endpoint = this.getUrl(`lobby/${lobbyId}/${urlEnd}`);
-
-		return this.http.get<WebResponse<boolean>>(endpoint);
-	}
-
-	startLobby(lobbyId: number) {
-		return this.http.put<WebResponse<undefined>>(
-			this.getUrl(`lobby/${lobbyId}/start`), {}
+	// Set ready = true
+	readyUp(gameId: number) {
+		return this.http.put<WebResponse<boolean>>(
+			this.getUrl(`game/${gameId}/ready`), {}
 		);
 	}
 
-	getGame(gameId: number) {
-		return this.http.get<WebResponse<Game>>(
-			this.getUrl(`game/${gameId}`)
+	// Set ready = false
+	unready(gameId: number) {
+		return this.http.put<WebResponse<boolean>>(
+			this.getUrl(`game/${gameId}/unready`), {}
 		)
 	}
 }

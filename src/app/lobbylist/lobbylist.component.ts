@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Lobby } from '../../models/lobby';
 import { UserService } from '../user/user.service';
 import { SocketService } from '../socket/socket.service';
 import { ApiService } from '../api/api.service';
 import { Router } from '@angular/router';
+import { GameLobby } from '../../models/game';
 
 @Component({
 	selector: 'app-lobbylist',
@@ -12,36 +12,36 @@ import { Router } from '@angular/router';
 })
 export class LobbylistComponent implements OnInit, OnDestroy {
 
-	public lobbies: Lobby[] = [];
+	public lobbies: GameLobby[] = [];
 	public newLobbyName = '';
 	public createLobbyError = '';
 
 	constructor(
-		private socketService: SocketService,
-		public userService: UserService,
-		public apiService: ApiService,
+		private socket: SocketService,
+		public user: UserService,
+		public api: ApiService,
 		public router: Router
 	) {
 		// Get lobby list
-		this.socketService.bindRoute('getLobbyList', this.getLobbyList);
-		this.socketService.bindRoute('removeLobby', this.removeLobby);
-		this.socketService.bindRoute('addLobby', this.addLobby);
-		this.socketService.bindRoute('lobbyPlayerChange', this.lobbyPlayerChange);
+		this.socket.io.on('getLobbyList', this.getLobbyList.bind(this));
+		this.socket.io.on('removeLobby', this.removeLobby.bind(this));
+		this.socket.io.on('addLobby', this.addLobby.bind(this));
+		this.socket.io.on('lobbyPlayerChange', this.lobbyPlayerChange.bind(this));
 
-		this.socketService.sendMsg('getLobbyList');
+		this.socket.io.emit('getLobbyList');
 	}
 
 	ngOnInit(): void {
 	}
 
 	ngOnDestroy(): void {
-		this.socketService.clearRoute('getLobbyList');
-		this.socketService.clearRoute('removeLobby');
-		this.socketService.clearRoute('addLobby');
-		this.socketService.clearRoute('lobbyPlayerChange');
+		this.socket.io.off('getLobbyList');
+		this.socket.io.off('removeLobby');
+		this.socket.io.off('addLobby');
+		this.socket.io.off('lobbyPlayerChange');
 	}
 
-	lobbyPlayerChange = (data: {lobby: number; change: number}) => {
+	lobbyPlayerChange(data: {lobby: number; change: number}) {
 		this.lobbies.forEach(lobby => {
 			if (lobby.id === data.lobby) {
 				lobby.player_count = data.change
@@ -50,17 +50,18 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 	}
 
 	// Recieve the list of lobbies
-	getLobbyList = (lobbies: Lobby[]) => {
+	getLobbyList(lobbies: GameLobby[]) {
+		console.log(lobbies);
 		this.lobbies = lobbies;
 	}
 
 	// Remove a lobby by a given id
-	removeLobby = (rLobby: {id: number}) => {
-		this.lobbies = this.lobbies.filter(lobby => lobby.id !== rLobby.id);
+	removeLobby(lobbyId: number) {
+		this.lobbies = this.lobbies.filter(lobby => lobby.id !== lobbyId);
 	}
 
 	// Add a new lobby to the list
-	addLobby = (lobby: Lobby) => {
+	addLobby(lobby: GameLobby) {
 		this.lobbies.push(lobby);
 	}
 
@@ -69,7 +70,7 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		this.apiService.createLobby(this.newLobbyName)
+		this.api.createGame(this.newLobbyName)
 		.subscribe(response => {
 			if (response.status.success) {
 				this.router.navigate([`/game/${response.data.id}`])

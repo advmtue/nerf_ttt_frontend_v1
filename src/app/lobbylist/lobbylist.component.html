@@ -10,10 +10,10 @@
 			<p>View</p>
 		</a>
 	</div>
-	<div *ngIf="lobbies.length === 0 && !userService.hasPermission('createLobby')">
+	<div *ngIf="lobbies.length === 0 && !user.hasPermission('createLobby')">
 		<p>Waiting for an admin to start a lobby.</p>
 	</div>
-	<div class="create-lobby form-group" *ngIf="userService.hasPermission('createLobby')">
+	<div class="create-lobby form-group" *ngIf="user.hasPermission('createLobby')">
 		<h3>Create Lobby</h3>
 		<input class="form-input" type="text" [(ngModel)]="newLobbyName"><br>
 		<p class="error" *ngIf="createLobbyError === ''">{{ createLobbyError }}</p>

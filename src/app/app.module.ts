@@ -9,7 +9,6 @@ import { LoginComponent } from './login/login.component';
 import { PlayerlistComponent } from './playerlist/playerlist.component';
 import { GamehistoryComponent } from './gamehistory/gamehistory.component';
 import { GameComponent } from './game/game.component';
-import { GamestatsComponent } from './gamestats/gamestats.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { PlayerprofileComponent } from './playerprofile/playerprofile.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -25,6 +24,7 @@ import { TokenService } from './token/token.service';
 
 import { AuthInterceptor } from './auth.interceptor';
 import { PlayerNameComponent } from './player-name/player-name.component';
+import { GameviewComponent } from './gameview/gameview.component';
 
 @NgModule({
 	declarations: [
@@ -33,14 +33,14 @@ import { PlayerNameComponent } from './player-name/player-name.component';
 		PlayerlistComponent,
 		GamehistoryComponent,
 		GameComponent,
-		GamestatsComponent,
 		LobbyComponent,
 		PlayerprofileComponent,
 		NavbarComponent,
 		LobbylistComponent,
 		LogoutComponent,
 		PasswordresetComponent,
-		PlayerNameComponent
+		PlayerNameComponent,
+		GameviewComponent
 	],
 	imports: [
 		BrowserModule,

@@ -25,15 +25,29 @@ export class SocketService {
 	// socket-event :: disconnect
 	disconnected = () => {
 		this.connectionStatus.next('SOCKET_NONE');
+
+		// Attempt to reconnect every second
+		let iv = setInterval(() => {
+			if (!this.io.connected) {
+				console.log('Lost socket. Reconnecting...');
+				this.io.connect();
+			} else {
+				clearInterval(iv);
+			}
+		}, 1000);
 	}
 
 	// socket-event :: connect
 	connected = () => {
+		console.log('Socket connected.');
 		this.connectionStatus.next('SOCKET_CONNECT');
 	}
 
 	// socket-event :: auth
-	authed = () => {
+	authed = (authStatus: boolean) => {
+		if (authStatus === false ) {
+			return;
+		}
 		this.connectionStatus.next('SOCKET_READY');
 	}
 
@@ -47,39 +61,9 @@ export class SocketService {
 	}
 
 	/**
-	 * Add a route for a given event name
-	 *
-	 * @param name Event name
-	 * @param fn Callback function
-	 */
-	bindRoute(name: string, fn: (d: any) => any) {
-		this.io.on(name, fn);
-	}
-
-	/**
-	 * Remove rounte for given event name
-	 *
-	 * @param name Event name
-	 */
-	clearRoute(name: string) {
-		this.io.off(name);
-	}
-
-	/**
-	 * Send a message over the socket
-	 *
-	 * @param name Event name
-	 * @param data Data object
-	 */
-	sendMsg(name: string, data: any = {}) {
-		this.io.emit(name, data);
-	}
-
-	/**
 	 * Perform cleanup of authenticated sockets
 	 */
 	logout() {
 		this.io.disconnect();
-		this.io.connect();
 	}
 }

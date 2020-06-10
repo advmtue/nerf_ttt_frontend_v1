@@ -3,13 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { PlayerlistComponent } from './playerlist/playerlist.component';
 import { GamehistoryComponent } from './gamehistory/gamehistory.component';
-import { GamestatsComponent } from './gamestats/gamestats.component';
-import { GameComponent } from './game/game.component';
 import { LobbylistComponent } from './lobbylist/lobbylist.component';
-import { LobbyComponent } from './lobby/lobby.component';
 import { PlayerprofileComponent } from './playerprofile/playerprofile.component';
 import { LogoutComponent } from './logout/logout.component';
 import { PasswordresetComponent } from './passwordreset/passwordreset.component';
+import { GameviewComponent } from './gameview/gameview.component';
 
 import { LoginGuard } from './login.guard';
 import { LogoutGuard } from './logout.guard';
@@ -28,14 +26,11 @@ const routes: Routes = [
 
 	// View game history
 	{ path: 'game', component: GamehistoryComponent, canActivate: [RedirectGuard, LoginGuard] },
+
 	// Redirects depending on state
 	// Game -> Game or home if not auth
 	// Lobby -> LobbyComponent
-	// Ended -> Gamestats
-	{ path: 'game/:id', component: LobbyComponent, canActivate: [RedirectGuard, LoginGuard] },
-	{ path: 'game/:id/stats', component: GamestatsComponent, canActivate: [RedirectGuard, LoginGuard] },
-	{ path: 'game/:id/active', component: GameComponent, canActivate: [RedirectGuard, LoginGuard] },
-	{ path: 'game/:id/lobby', component: LobbyComponent, canActivate: [RedirectGuard, LoginGuard] },
+	{ path: 'game/:id', component: GameviewComponent, canActivate: [RedirectGuard, LoginGuard] },
 
 	// View player list or specific
 	{ path: 'user', component: PlayerlistComponent, canActivate: [RedirectGuard, LoginGuard] },
