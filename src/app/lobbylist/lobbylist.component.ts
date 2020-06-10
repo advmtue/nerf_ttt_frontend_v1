@@ -41,12 +41,10 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 		this.socket.io.off('lobbyPlayerChange');
 	}
 
-	lobbyPlayerChange(data: {lobby: number; change: number}) {
-		this.lobbies.forEach(lobby => {
-			if (lobby.id === data.lobby) {
-				lobby.player_count = data.change
-			}
-		})
+	lobbyPlayerChange(lobbyId: number, count: number) {
+		const l = this.lobbies.find(lobby => lobby.id === lobbyId);
+		if (!l) return;
+		l.player_count = count;
 	}
 
 	// Recieve the list of lobbies

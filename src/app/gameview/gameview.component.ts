@@ -8,7 +8,7 @@ import { SocketService } from '../socket/socket.service';
 	templateUrl: './gameview.component.html',
 	styleUrls: ['./gameview.component.scss']
 })
-export class GameviewComponent implements OnInit {
+export class GameviewComponent implements OnInit, OnDestroy {
 
 	public game: Game | undefined;
 
@@ -21,13 +21,29 @@ export class GameviewComponent implements OnInit {
 		})
 
 		this.socket.io.on('getGame', this.getGame.bind(this));
+		this.socket.io.on('gameStart', this.gameStart.bind(this));
+		this.socket.io.on('gamePregame', this.gamePregame.bind(this));
 	}
 
 	ngOnDestroy() {
 		this.socket.io.off('getGame');
+		this.socket.io.off('gameStart');
+		this.socket.io.off('gamePregame');
+	}
+
+	gamePregame() {
+		console.log('pregame- requesting id: ', this.game.id);
+		this.socket.io.emit('getGame', this.game.id);
+	}
+
+	// Request a fresh game state
+	gameStart() {
+		console.log('requesting game id:', this.game.id);
+		this.socket.io.emit('getGame', this.game.id);
 	}
 
 	getGame(game: Game) {
+		console.log('Got game: ', game);
 		this.game = game;
 	}
 

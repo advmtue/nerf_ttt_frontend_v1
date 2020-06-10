@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../api/api.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input } from '@angular/core';
 import { Game, GamePlayer } from '../../models/game';
 import { UserService } from '../user/user.service';
 
@@ -20,61 +18,57 @@ const winConditions = {
 };
 
 @Component({
-  selector: 'app-game',
-  templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
+	selector: 'app-game',
+	templateUrl: './game.component.html',
+	styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  public game: Game | undefined = undefined;
-  public display = false;
-  public localPlayer: GamePlayer | undefined;
-  public associates: GamePlayer[];
-  public secondsLeft: number = -1;
+	@Input('game') game: Game;
 
-  public winConditions = winConditions;
+	public display = false;
+	public localPlayer: GamePlayer | undefined;
+	public associates: GamePlayer[];
+	public secondsLeft: number = -1;
 
-  constructor(
-    private api: ApiService,
-    private router: Router,
-    private route: ActivatedRoute,
-    public user: UserService,
-  ) {
-    this.route.paramMap.subscribe(params => {
-      this.gameId = Number(params.get('id'));
-    })
-  }
+	public timer: any;
 
-  set gameId(id: number) {
-    this.api.getGame(id)
-    .subscribe(response => {
-      if (response.status.success) {
-	this.assignGameState(response.data);
-      }
-    });
-  }
+	public winConditions = winConditions;
 
-  startTimer() {
-	  setInterval(() => this.secondsLeft--, 1000);
-  }
+	constructor(
+		public user: UserService,
+	) { }
 
-  assignGameState(game: Game) {
-	this.game = game;
-        this.localPlayer = game.players.find(p => p.id === this.user.player.id);
-	this.associates = game.players.filter(pl => {
-		return pl.role !== 'INNOCENT' && pl.id !== this.localPlayer.id
-	});
+	ngOnInit(): void {
+		this.assignGameState();
+	}
 
-	// Setup seconds until next game phase
-	// game.next_time = new Date(game.next_time);
-	// this.secondsLeft = Math.floor((game.next_time.valueOf() - Date.now()) / 1000);
-	this.secondsLeft = 100;
-	this.startTimer();
+	startTimer() {
+		this.timer = setInterval(() => {
+			this.secondsLeft--;
+			if (this.secondsLeft < 0) {
+				this.secondsLeft = 0;
+				clearInterval(this.timer);
+			}
+		}, 1000);
+	}
 
-	// Ready to display
-	this.display = true;
-  }
+	assignGameState() {
+		this.localPlayer = this.game.players.find(p => p.id === this.user.player.id);
+		this.associates = this.game.players.filter(pl => {
+			return pl.role !== 'INNOCENT' && pl.id !== this.localPlayer.id
+		});
 
-  ngOnInit(): void {
-  }
+		// Setup seconds until next game phase
+		this.game.date_launched = new Date(this.game.date_launched);
+		const n = new Date();
+		const s = (this.game.date_launched.valueOf() - n.valueOf()) / 1000;
+
+		this.secondsLeft = Math.floor(s);
+		this.startTimer();
+
+		// Ready to display
+		this.display = true;
+	}
+
 
 }

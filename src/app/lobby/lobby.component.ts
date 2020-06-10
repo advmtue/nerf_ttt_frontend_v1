@@ -20,8 +20,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
 		public socket: SocketService,
 		public router: Router,
 	) {
-		// Add socket routes
-
 		socket.io.on('playerJoin', this.playerJoin.bind(this));
 		socket.io.on('playerLeave', this.playerLeave.bind(this));
 		socket.io.on('playerReady', this.playerReady.bind(this));
