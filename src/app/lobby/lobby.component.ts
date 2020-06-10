@@ -29,6 +29,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
+		// Leave the lobby
+		this.setJoined(false);
+
 		this.socket.io.off('playerJoin');
 		this.socket.io.off('playerLeave');
 		this.socket.io.off('playerReady');
@@ -69,6 +72,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
 	// Join / Leave the game
 	setJoined(joined: boolean = true) {
+		// Requesting same state, do nothing
+		if (this.localPlayerJoined === joined) return;
+
 		if (joined) {
 			this.api.joinGame(this.game.id).subscribe(this.checkWebResponse);
 		} else {

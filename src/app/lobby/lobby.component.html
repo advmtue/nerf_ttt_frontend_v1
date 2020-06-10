@@ -1,47 +1,54 @@
-<div class="info">
+<div class="info container">
 	<h1 class="title">{{ game.name }}</h1>
 	<p class="gamemaster-name">Created by
 		<app-player-name [player]=game.owner></app-player-name>
 	</p>
+	<p class="player-count">{{ game.players.length }} Players</p>
 </div>
 
 <!-- Player list -->
-<div class="playerlist">
-	<h3>Players ({{ game.players.length }})</h3>
+<div class="playerlist container">
 	<table>
 		<tr *ngFor='let player of game.players'>
 			<td><app-player-name [player]='player'></app-player-name></td>
 			<td class="player-status">
-				<span [class.ready]='player.ready'>
+				<p [class.ready]='player.ready'>
 					{{ player.ready ? 'Ready' : 'Not Ready'}}
-				</span>
+				</p>
 			</td>
 		</tr>
 	</table>
 </div>
 
-<div class="options">
+<div class="options container">
 	<div *ngIf="localPlayerJoined; then joinedBlock else anonBlock"></div>
 
 	<!-- Player is a member of the lobby -->
 	<ng-template #joinedBlock>
-		<button (click)='setJoined(false)'>Leave Lobby</button>
-		<button *ngIf="localPlayerReady" (click)="setReady(false)">Unready</button>
-		<button *ngIf="!localPlayerReady" (click)="setReady()">Ready up</button>
+		<div class='join-leave-buttons'>
+			<a class="button button-red"  *ngIf="localPlayerReady" (click)="setReady(false)">Unready</a>
+			<a class="button button-green"  *ngIf="!localPlayerReady" (click)="setReady()">Ready up</a>
+			<a class="button"  (click)='setJoined(false)'>Leave</a>
+		</div>
 	</ng-template>
 
 	<!-- Not currently participating -->
 	<ng-template #anonBlock>
-		<button *ngIf='!localPlayerJoined' (click)='setJoined()'>Join Lobby</button>
+		<a class="button button-green" *ngIf='!localPlayerJoined' (click)='setJoined()'>Join Lobby</a>
 	</ng-template>
 </div>
 
-<div *ngIf='localPlayerIsGM'>
-	<h3>Gamemaster Options</h3>
-	<button (click)='startLobby()'>Start lobby</button>
-</div>
+<div class="container lobby-options">
+	<div>
+		<a class="button"
+			(click)='startLobby()'
+			*ngIf='localPlayerIsGM'>Start lobby
+		</a>
 
-<div class="admin" *ngIf="user.hasPermission('closeLobby')">
-	<h3>Administration</h3>
-	<button (click)='adminCloseLobby()'>Close Lobby</button>
+		<a class="button"
+			(click)='adminCloseLobby()'
+			 *ngIf="user.hasPermission('closeLobby')">(Admin) Close Lobby
+		</a>
+
+	</div>
 </div>

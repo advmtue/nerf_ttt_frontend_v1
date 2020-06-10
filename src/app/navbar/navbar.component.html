@@ -1,34 +1,72 @@
-<div class="navbar">
-	<a href="#" routerLink="/" class="title">TTT</a>
-	<div *ngIf='this.authLevel === "AUTH_FULL"; then allOptions else minimalOptions'></div>
-	<ng-template #allOptions>
+<div class="navbar-container">
+	<div class="top">
+		<p>Nerf <span class='red bold'>TTT</span></p>
+	</div>
+
+	<div class="bottom" [ngSwitch]='this.authLevel'>
+
+		<!-- Full authentication -->
+		<ul *ngSwitchCase="'AUTH_FULL'">
+			<li>
+				<a href='#' routerLinkActive='active' routerLink='/lobby'>Home</a>
+			</li>
+			<li>
+				<a href='#' routerLinkActive='active' routerLink='/game'>History</a>
+			</li>
+			<li>
+				<a href='#' routerLinkActive='active' routerLink='/player'>Players</a>
+			</li>
+			<li>
+				<a href='#' routerLink='/logout'>Logout</a>
+			</li>
+		</ul>
+
+		<!-- Password Reset authentication -->
+		<ul *ngSwitchCase="'AUTH_PASSWORD_RESET'">
+			<li>
+				<a href='#' routerLink='/logout'>Logout</a>
+			</li>
+		</ul>
+
+		<!-- No auth level -->
+		<ul *ngSwitchDefault>
+			<li>
+				<a href='#' routerLink='/login'>Login</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<!--
+<a href="#" routerLink="/" class="title">TTT</a>
+<div *ngIf='this.authLevel === "AUTH_FULL"; then allOptions else minimalOptions'></div>
+<ng-template #allOptions>
+	<ul>
+		<li>
+			<a href="#" routerLink="/game">History</a>
+		</li>
+		<li>
+			<a href="#" routerLink="/user">Players</a>
+		</li>
+		<li>
+			<a href="#" routerLink="/logout">Logout</a>
+		</li>
+	</ul>
+</ng-template>
+<ng-template #minimalOptions>
+	<div *ngIf='this.authLevel === "AUTH_PASSWORD_RESET"; then logoutOnly else loginOnly'></div>
+	<ng-template #loginOnly>
 		<ul>
 			<li>
-				<a href="#" routerLink="/game">History</a>
+				<a href="#" routerLink="/login">Login</a>
 			</li>
-			<li>
-				<a href="#" routerLink="/user">Players</a>
-			</li>
+		</ul>
+	</ng-template>
+	<ng-template #logoutOnly>
+		<ul>
 			<li>
 				<a href="#" routerLink="/logout">Logout</a>
 			</li>
 		</ul>
 	</ng-template>
-	<ng-template #minimalOptions>
-		<div *ngIf='this.authLevel === "AUTH_PASSWORD_RESET"; then logoutOnly else loginOnly'></div>
-		<ng-template #loginOnly>
-			<ul>
-				<li>
-					<a href="#" routerLink="/login">Login</a>
-				</li>
-			</ul>
-		</ng-template>
-		<ng-template #logoutOnly>
-			<ul>
-				<li>
-					<a href="#" routerLink="/logout">Logout</a>
-				</li>
-			</ul>
-		</ng-template>
-	</ng-template>
-</div>
+</ng-template>
+-->

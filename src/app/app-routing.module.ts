@@ -16,7 +16,8 @@ import { RedirectGuard } from './redirect.guard';
 
 const routes: Routes = [
 	// Homepage -> Available lobbies
-	{ path: '', component: LobbylistComponent, canActivate: [RedirectGuard, LoginGuard] },
+	{ path: 'lobby', component: LobbylistComponent, canActivate: [RedirectGuard, LoginGuard] },
+	{ path: '', pathMatch: 'full', redirectTo: '/lobby' },
 
 	// Player login
 	{ path: 'login', component: LoginComponent, canActivate: [RedirectGuard, LogoutGuard] },
@@ -33,8 +34,8 @@ const routes: Routes = [
 	{ path: 'game/:id', component: GameviewComponent, canActivate: [RedirectGuard, LoginGuard] },
 
 	// View player list or specific
-	{ path: 'user', component: PlayerlistComponent, canActivate: [RedirectGuard, LoginGuard] },
-	{ path: 'user/:id', component: PlayerprofileComponent, canActivate: [RedirectGuard, LoginGuard] },
+	{ path: 'player', component: PlayerlistComponent, canActivate: [RedirectGuard, LoginGuard] },
+	{ path: 'player/:id', component: PlayerprofileComponent, canActivate: [RedirectGuard, LoginGuard] },
 
 	// Reset password
 	{ path: 'passwordreset', component: PasswordresetComponent, canActivate: [RedirectGuard, PasswordresetGuard] }

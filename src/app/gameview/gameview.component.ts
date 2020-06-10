@@ -9,7 +9,6 @@ import { SocketService } from '../socket/socket.service';
 	styleUrls: ['./gameview.component.scss']
 })
 export class GameviewComponent implements OnInit, OnDestroy {
-
 	public game: Game | undefined;
 
 	constructor(

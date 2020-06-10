@@ -2,9 +2,9 @@
 	<div class="container">
 		<h3>{{ localPlayer.role }}</h3>
 	</div>
-	<div class="container" *ngIf='associates.length > 0'>
-		<h3>Confirmed Roles</h3>
-		<p *ngFor='let player of associates'>
+	<div class="container">
+		<h3>Players</h3>
+		<p *ngFor='let player of game.players'>
 		 {{ player.role }} - 
 		 <app-player-name [player]='player'></app-player-name>
 		</p>

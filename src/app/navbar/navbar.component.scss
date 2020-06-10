@@ -1,32 +1,39 @@
-.navbar {
-	background: black;
-	color: white;
-	padding: 0.5em 0;
+@import '~src/styles.scss';
 
-	a.title {
+.navbar-container {
+	background: $color-ttt-darkest;
+	font-family: $font-ttt-special;
+
+	.top p {
+		text-align: center;
+		margin: 0;
+		padding: 0.6em 0 0.4em;
+
+		font-size: 1.3em;
 		color: white;
-		text-decoration: none;
-		font-weight: bold;
-		padding-left: 0.5em;
 	}
-}
 
-ul {
-	list-style-type: none;
-	display: flex;
-	margin: 0;
-	padding: 0;
-	float: right;
+	.bottom ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		text-align: center;
 
-	li {
-		display: inline-block;
-		padding: 0 0.5em;
+		li {
+			display: inline-block;
+			padding: 0.8em 1em;
 
 
-		a {
-			text-decoration: none;
-			color: white;
+			a {
+				text-decoration: none;
+				color: grey;
+
+				&.active {
+					color: $color-ttt-yellow;
+				}
+			}
+
 		}
-
 	}
 }
+

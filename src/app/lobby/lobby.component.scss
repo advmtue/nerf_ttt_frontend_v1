@@ -1,15 +1,41 @@
+@import 'src/styles.scss';
+
 table {
 	width: 100%;
+	margin-bottom: 1em;
+}
+
+.info {
+	.title {
+		margin-bottom: 0.2em;
+	}
+
+	p {
+		margin: 0;
+	}
 }
 
 td.player-status {
 	text-align: right;
 
-	span {
-		color: maroon;
+	p {
+		margin: 0;
+
+		color: $color-ttt-red-dark;
 
 		&.ready {
-			color: green;
+			color: $color-ttt-green;
 		}
 	}
 }
+
+.join-leave-buttons {
+	display: flex;
+	justify-content: space-between;
+
+	.button {
+		width: 48%;
+	}
+}
+
+.lobby-options:nth-child(1):empty { display: none }

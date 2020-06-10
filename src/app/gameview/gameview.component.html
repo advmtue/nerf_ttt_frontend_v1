@@ -2,13 +2,15 @@
 	<div *ngIf='game.status === "LOBBY"'>
 		<app-lobby [game]='game'></app-lobby>
 	</div>
-	<div *ngIf='game.status === "PREGAME"'>
+	<div *ngIf='game.status !== "LOBBY"'>
 		<app-game [game]='game'></app-game>
 	</div>
+	<!--
 	<div *ngIf='game.status === "INGAME"'>
 		<p>View the game</p>
 	</div>
 	<div *ngIf='game.status === "ENDED"'>
 		<p>View the stats</p>
 	</div>
+	-->
 </div>

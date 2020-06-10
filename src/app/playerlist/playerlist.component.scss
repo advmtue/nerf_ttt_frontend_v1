@@ -1,15 +1,8 @@
-.search {
-	margin-bottom: 1em;
-
-	input {
-		margin-right: 1em;
-	}
-}
+@import '~src/styles.scss';
 
 .container {
-
 	.player-container {
-		border: 2px solid lightgray;
+		border-bottom: 1px solid $color-ttt-light;
 		margin: 0 auto 0.5em auto;
 
 		a {

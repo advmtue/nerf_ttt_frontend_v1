@@ -1,4 +1,7 @@
-<h1>Lobbies</h1>
+<div class="container">
+	<h1 class="title">Lobbies</h1>
+</div>
+
 <div class="container">
 	<div class="lobby-tile" *ngFor="let lobby of lobbies">
 		<div class="info">
@@ -13,10 +16,11 @@
 	<div *ngIf="lobbies.length === 0 && !user.hasPermission('createLobby')">
 		<p>Waiting for an admin to start a lobby.</p>
 	</div>
-	<div class="create-lobby form-group" *ngIf="user.hasPermission('createLobby')">
-		<h3>Create Lobby</h3>
-		<input class="form-input" type="text" [(ngModel)]="newLobbyName"><br>
-		<p class="error" *ngIf="createLobbyError === ''">{{ createLobbyError }}</p>
-		<button class="form-submit" (click)='createNewLobby()'>Create</button>
-	</div>
+</div>
+
+<div class="container" *ngIf="user.hasPermission('createLobby')">
+	<h3 class="title">Create Lobby</h3>
+	<input placeholder='Game name' type="text" [(ngModel)]="newLobbyName"><br>
+	<p class="error" *ngIf="createLobbyError === ''">{{ createLobbyError }}</p>
+	<a class="button" (click)='createNewLobby()'>Create</a>
 </div>

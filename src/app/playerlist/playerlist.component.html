@@ -1,8 +1,9 @@
-<h1>Players</h1>
-<div class="search">
-	<input type="text" [(ngModel)]="searchName" (input)="updateFilter()">
+<div class="container">
+	<h1 class="title">Players</h1>
+	<input type="text" placeholder='filter...' [(ngModel)]="searchName" (input)="updateFilter()">
 	<p>Showing {{ activeList.length }} player(s)</p>
 </div>
+
 <div class="container">
 	<div class="player-container" *ngFor="let player of activeList">
 		<div class="title">

@@ -1,15 +1,66 @@
 /* You can add global styles to this file, and also import other style files */
 
+/** Useful Styling Helpers */
+$color-ttt-red: #cc6666;
+$color-ttt-red-dark: #a54242;
+$color-ttt-green: #4c8a51;
+$color-ttt-yellow: goldenrod;
+
+$color-ttt-dark: #111111;
+$color-ttt-darker: #111111;
+$color-ttt-darkest: black;
+
+$color-ttt-light: #777777;
+$color-ttt-lighter: #aaaaaa;
+
+$color-ttt-font: #eeeeee;
+
+$font-ttt-special: 'PT Mono', monospace;
+$font-ttt-body: 'Poppins', sans-serif;
+
+.red { color: $color-ttt-red; }
+.gold { color: $color-ttt-yellow; }
+.bold { font-weight: bold; }
+.bolder { font-weight: bolder; }
+
+
+/** HTML/Body full height w no margin/padding */
 html, body {
 	height: 100%;
 	min-height: 100%;
 }
 
+p, a, td {
+	font-family: $font-ttt-special;
+}
+
+h1, h2, h3, h4, h5 {
+	font-family: $font-ttt-body;
+	font-weight: 300;
+}
+
 body {
 	margin: 0;
 	padding: 0;
+	background-color: $color-ttt-dark;
+	color: $color-ttt-font;
+
 }
 
+.container {
+	margin-bottom: 1.5em;
+
+	&:first-child {
+		margin-top: 2em;
+	}
+
+	.title {
+		margin: 0 0 0.2em 0;
+	}
+}
+
+
+/** Uniform ERROR style */
 p.error {
 	margin: 0;
 	color: red;
@@ -17,15 +68,40 @@ p.error {
 
 
 /* Forms such as login and password reset */
-.form-group {
-	margin-bottom: 1em;
+input[type='text'], input[type='password'] {
+	color: $color-ttt-font;
+	font-family: $font-ttt-body;
 
-	input {
-		width: 100%;
-		box-sizing: border-box;
-	}
+	width: calc(100% - 1em);
+	padding: 10px 0 10px 0;
+	border: none;
+	border-radius: 0;
+	background-color: #333333;
+	padding-left: 1em;
+	margin-bottom: 0.8em;
 }
 
-.form-submit {
+button, .button {
+	display: inline-block;
+	text-align: center;
 	width: 100%;
+	border: 1px solid $color-ttt-light;
+	margin: 0.5em 0 0.5em 0;
+	padding: 10px 0 10px 0;
+	cursor: pointer;
+	border-radius: 0;
+
+	background-color: $color-ttt-dark;
+	color: $color-ttt-font;
+	font-family: $font-ttt-body;
+
+	&.button-red {
+		background-color: $color-ttt-red-dark;
+		border: none;
+	}
+
+	&.button-green {
+		background-color: $color-ttt-green;
+		border: none;
+	}
 }
