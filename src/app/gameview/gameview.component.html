@@ -1,16 +1,20 @@
 <div *ngIf='game'>
-	<div *ngIf='game.status === "LOBBY"'>
+	<div [ngSwitch]='game.status'>
+	<div *ngSwitchCase="'LOBBY'">
 		<app-lobby [game]='game'></app-lobby>
 	</div>
-	<div *ngIf='game.status !== "LOBBY"'>
+	<div *ngSwitchCase="'PREGAME'">
 		<app-game [game]='game'></app-game>
 	</div>
-	<!--
-	<div *ngIf='game.status === "INGAME"'>
-		<p>View the game</p>
+	<div *ngSwitchCase="'INGAME'">
+		<app-game-ingame [game]='game'></app-game-ingame>
 	</div>
-	<div *ngIf='game.status === "ENDED"'>
-		<p>View the stats</p>
+	<div *ngSwitchCase="'ENDED'">
+		<p>This is where I would put my stats.</p>
+		<p>IF I HAD ANY<p>
+		<p>Btw the winning team was {{ game.winning_team }}</p>
 	</div>
-	-->
+	<div *ngSwitchDefault>
+		<p>You shouldn't be able to see this text. Hello tho</p>
+	</div>
 </div>

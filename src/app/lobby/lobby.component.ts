@@ -14,6 +14,8 @@ import { WebResponse } from '../../models/response';
 export class LobbyComponent implements OnInit, OnDestroy {
 	@Input('game') game: Game;
 
+	private gameStartIgnore: boolean = false;
+
 	constructor(
 		public api: ApiService,
 		public user: UserService,
@@ -26,11 +28,23 @@ export class LobbyComponent implements OnInit, OnDestroy {
 		socket.io.on('playerUnready', this.playerUnready.bind(this));
 		socket.io.on('gameCloseAdmin', this.gameClose.bind(this));
 		socket.io.on('gameCloseOwner', this.gameClose.bind(this));
+		socket.io.on('getGame', this.getGame.bind(this));
+	}
+
+	getGame(game: Game) {
+		// We are probably about to be tidied
+		if (game.status !== 'LOBBY') {
+				this.gameStartIgnore = true;
+		}
 	}
 
 	ngOnDestroy(): void {
 		// Leave the lobby
-		this.setJoined(false);
+		if (!this.gameStartIgnore) {
+			this.setJoined(false);
+		} else {
+			console.log('Ignoring leaveGame for started game');
+		}
 
 		this.socket.io.off('playerJoin');
 		this.socket.io.off('playerLeave');

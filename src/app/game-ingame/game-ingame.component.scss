@@ -1,0 +1,18 @@
+@import '~src/styles.scss';
+
+span#role {
+	text-decoration: underline;
+
+	&.TRAITOR { text-decoration-color: $color-ttt-traitor }
+	&.DETECTIVE { text-decoration-color: $color-ttt-detective }
+	&.INNOCENT { text-decoration-color: $color-ttt-innocent }
+}
+
+.countdown {
+	text-align: center;
+	margin: 5em 0 5em 0;
+}
+
+.death-notice {
+	color: $color-ttt-red-dark;
+}

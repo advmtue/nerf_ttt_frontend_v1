@@ -1,0 +1,40 @@
+<div class="container">
+	<p class="countdown">Time left: <app-date-countdown [date]='game.date_ended'></app-date-countdown>s</p>
+</div>
+
+<div class="container">
+	<div class='button'
+		(click)='toggleInfo()'>
+		Toggle Game Info
+	</div>
+	<div *ngIf='shouldShowInfo'>
+		<p>You are <span id='role' [class]='localPlayer.role'>{{ localPlayer.role }}</span></p>
+		<p *ngFor='let player of associates'>
+			<app-player-name-game [player]='player'></app-player-name-game>
+		</p>
+	</div>
+	<div *ngIf="localPlayer.alive">
+		<div
+			class='button'
+			(click)='toggleAbilities()'>
+			Abilities
+		</div>
+		<div *ngIf='shouldShowAbilities'>
+			<p>Nothing to see here, chief.</p>
+		</div>
+		<div *ngIf='!showKillerList'>
+			<div class="button button-red-outline" (click)='toggleDeath()'>I'm Dead</div>
+		</div>
+		<div *ngIf='showKillerList'>
+			<div class="button button-green-outline" (click)='toggleDeath()'>CANCEL</div>
+			<label>Select your killer</label><br/>
+			<select [(ngModel)]='selectedKiller'>
+				<option *ngFor='let player of playersNotSelf' [value]='player.id'>{{ player.name }}</option>
+			</select>
+			<div class="button button-red" (click)='die()'>Confirm</div>
+		</div>
+	</div>
+	<div *ngIf='!localPlayer.alive'>
+		<p class='death-notice'>You're dead. How sad.</p>
+	</div>
+</div>

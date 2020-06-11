@@ -26,6 +26,8 @@ import { AuthInterceptor } from './auth.interceptor';
 import { PlayerNameComponent } from './player-name/player-name.component';
 import { GameviewComponent } from './gameview/gameview.component';
 import { PlayerNameGameComponent } from './player-name-game/player-name-game.component';
+import { GameIngameComponent } from './game-ingame/game-ingame.component';
+import { DateCountdownComponent } from './date-countdown/date-countdown.component';
 
 @NgModule({
 	declarations: [
@@ -42,7 +44,9 @@ import { PlayerNameGameComponent } from './player-name-game/player-name-game.com
 		PasswordresetComponent,
 		PlayerNameComponent,
 		GameviewComponent,
-		PlayerNameGameComponent
+		PlayerNameGameComponent,
+		GameIngameComponent,
+		DateCountdownComponent
 	],
 	imports: [
 		BrowserModule,

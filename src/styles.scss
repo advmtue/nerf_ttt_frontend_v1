@@ -85,6 +85,21 @@ input[type='text'], input[type='password'] {
 	margin-bottom: 0.8em;
 }
 
+select {
+	color: $color-ttt-font;
+	font-family: $font-ttt-body;
+
+	width: 100%;
+	padding: 10px 0 10px 0;
+	border: none;
+	border-radius: 0;
+	padding-left: 1em;
+
+	appearance: none;
+	border: 1px solid #333333;
+	background-color: $color-ttt-dark;
+}
+
 button, .button {
 	display: inline-block;
 	text-align: center;
@@ -104,8 +119,16 @@ button, .button {
 		border: none;
 	}
 
+	&.button-red-outline {
+		border: 1px solid $color-ttt-red-dark;
+	}
+
 	&.button-green {
 		background-color: $color-ttt-green;
 		border: none;
+	}
+
+	&.button-green-outline {
+		border: 1px solid $color-ttt-green;
 	}
 }

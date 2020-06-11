@@ -21,24 +21,16 @@ export class GameviewComponent implements OnInit, OnDestroy {
 
 		this.socket.io.on('getGame', this.getGame.bind(this));
 		this.socket.io.on('gameStart', this.gameStart.bind(this));
-		this.socket.io.on('gamePregame', this.gamePregame.bind(this));
 	}
 
 	ngOnDestroy() {
 		this.socket.io.off('getGame');
 		this.socket.io.off('gameStart');
-		this.socket.io.off('gamePregame');
-	}
-
-	gamePregame() {
-		console.log('pregame- requesting id: ', this.game.id);
-		this.socket.io.emit('getGame', this.game.id);
 	}
 
 	// Request a fresh game state
 	gameStart() {
-		console.log('requesting game id:', this.game.id);
-		this.socket.io.emit('getGame', this.game.id);
+		this.game.status = 'INGAME';
 	}
 
 	getGame(game: Game) {

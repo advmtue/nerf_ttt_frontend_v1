@@ -14,6 +14,10 @@
 	</div>
 
 	<div class="container timer">
-		<h3>Starting in {{ secondsLeft }} seconds...</h3>
+		<h3>
+			Starting in
+			<app-date-countdown [date]='game.date_launched'></app-date-countdown>
+			seconds...
+		</h3>
 	</div>
 </div>

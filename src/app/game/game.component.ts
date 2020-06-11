@@ -25,9 +25,6 @@ export class GameComponent implements OnInit {
 	public display = false;
 	public localPlayer: GamePlayer | undefined;
 	public associates: GamePlayer[];
-	public secondsLeft: number = -1;
-
-	public timer: any;
 
 	public winConditions = winConditions;
 
@@ -39,28 +36,10 @@ export class GameComponent implements OnInit {
 		this.assignGameState();
 	}
 
-	startTimer() {
-		this.timer = setInterval(() => {
-			this.secondsLeft--;
-			if (this.secondsLeft < 0) {
-				this.secondsLeft = 0;
-				clearInterval(this.timer);
-			}
-		}, 1000);
-	}
-
 	assignGameState() {
 		this.localPlayer = this.game.players.find(p => p.id === this.user.player.id);
 
 		this.associates = this.game.players.filter(pl => pl.role !== 'INNOCENT');
-
-		// Setup seconds until next game phase
-		this.game.date_launched = new Date(this.game.date_launched);
-		const n = new Date();
-		const s = (this.game.date_launched.valueOf() - n.valueOf()) / 1000;
-
-		this.secondsLeft = Math.floor(s);
-		this.startTimer();
 
 		// Ready to display
 		this.display = true;
