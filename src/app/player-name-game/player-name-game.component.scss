@@ -1,0 +1,16 @@
+@import '~src/styles.scss';
+
+span {
+	&.TRAITOR {
+		color: $color-ttt-traitor;
+	}
+
+	&.DETECTIVE {
+		color: $color-ttt-detective;
+	}
+
+	&.INNOCENT {
+		color: $color-ttt-innocent;
+	}
+}
+

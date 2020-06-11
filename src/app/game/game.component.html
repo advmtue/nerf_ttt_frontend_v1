@@ -1,22 +1,19 @@
 <div *ngIf="display">
 	<div class="container">
-		<h3>{{ localPlayer.role }}</h3>
+		<h3 class="role">Your role is <span [class]="localPlayer.role">{{ localPlayer.role }}</span></h3>
 	</div>
+
 	<div class="container">
-		<h3>Players</h3>
-		<p *ngFor='let player of game.players'>
-		 {{ player.role }} - 
-		 <app-player-name [player]='player'></app-player-name>
+		<p *ngFor='let player of associates'>
+		 <app-player-name-game [player]='player'></app-player-name-game>
 		</p>
 	</div>
+
 	<div class="container">
-		<h3>Win Conditions</h3>
 		<p *ngFor='let cond of winConditions[localPlayer.role]'>{{ cond }}</p>
 	</div>
-	<div>
-		<h3>Abilities</h3>
-	</div>
-	<div class="container">
+
+	<div class="container timer">
 		<h3>Starting in {{ secondsLeft }} seconds...</h3>
 	</div>
 </div>

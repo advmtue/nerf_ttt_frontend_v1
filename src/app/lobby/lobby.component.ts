@@ -75,6 +75,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
 		// Requesting same state, do nothing
 		if (this.localPlayerJoined === joined) return;
 
+		// Only leave if lobby state
+		if (this.game.status !== 'LOBBY') return;
+
 		if (joined) {
 			this.api.joinGame(this.game.id).subscribe(this.checkWebResponse);
 		} else {

@@ -4,16 +4,13 @@ import { UserService } from '../user/user.service';
 
 const winConditions = {
 	'TRAITOR': [
-		'Only Traitors are left alive',
-		'Time expires and the detective is dead.'
+		'Kill the detective and survive the round.',
 	],
 	'DETECTIVE': [
-		'No traitors are left alive.',
-		'Time expires and you are still alive.'
+		'Kill all traitors or survive the game.',
 	],
 	'INNOCENT': [
-		'No traitors are currently alive.',
-		'Time expires and there is a detective alive.'
+		'Keep your detective alive.'
 	],
 };
 
@@ -54,9 +51,8 @@ export class GameComponent implements OnInit {
 
 	assignGameState() {
 		this.localPlayer = this.game.players.find(p => p.id === this.user.player.id);
-		this.associates = this.game.players.filter(pl => {
-			return pl.role !== 'INNOCENT' && pl.id !== this.localPlayer.id
-		});
+
+		this.associates = this.game.players.filter(pl => pl.role !== 'INNOCENT');
 
 		// Setup seconds until next game phase
 		this.game.date_launched = new Date(this.game.date_launched);

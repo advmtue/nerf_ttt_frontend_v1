@@ -25,6 +25,7 @@ import { TokenService } from './token/token.service';
 import { AuthInterceptor } from './auth.interceptor';
 import { PlayerNameComponent } from './player-name/player-name.component';
 import { GameviewComponent } from './gameview/gameview.component';
+import { PlayerNameGameComponent } from './player-name-game/player-name-game.component';
 
 @NgModule({
 	declarations: [
@@ -40,7 +41,8 @@ import { GameviewComponent } from './gameview/gameview.component';
 		LogoutComponent,
 		PasswordresetComponent,
 		PlayerNameComponent,
-		GameviewComponent
+		GameviewComponent,
+		PlayerNameGameComponent
 	],
 	imports: [
 		BrowserModule,
