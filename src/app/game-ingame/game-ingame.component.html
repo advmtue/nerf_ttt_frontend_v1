@@ -1,5 +1,6 @@
 <div class="container">
-	<p class="countdown">Time left: <app-date-countdown [date]='game.date_ended'></app-date-countdown>s</p>
+	<p class="countdown">Time left: 
+		<app-second-countdown [seconds]='game.timer'></app-second-countdown>s</p>
 </div>
 
 <div class="container">

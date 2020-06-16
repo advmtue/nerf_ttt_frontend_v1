@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges } from '@angular/core';
 
 @Component({
 	selector: 'app-date-countdown',
 	templateUrl: './date-countdown.component.html',
 	styleUrls: ['./date-countdown.component.scss']
 })
-export class DateCountdownComponent implements OnInit {
+export class DateCountdownComponent implements OnInit, OnDestroy, OnChanges {
 	@Input('date') date: Date;
 
 	public seconds: number;
@@ -16,6 +16,14 @@ export class DateCountdownComponent implements OnInit {
 	ngOnInit(): void {
 		this.calculate();
 		this.startTimer();
+	}
+
+	ngOnChanges() {
+		this.calculate();
+	}
+
+	ngOnDestroy() {
+		this.stopTimer();
 	}
 
 	startTimer() {

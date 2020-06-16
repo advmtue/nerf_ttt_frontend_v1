@@ -33,10 +33,6 @@ export class GameComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		this.assignGameState();
-	}
-
-	assignGameState() {
 		this.localPlayer = this.game.players.find(p => p.id === this.user.player.id);
 
 		this.associates = this.game.players.filter(pl => pl.role !== 'INNOCENT');
@@ -44,6 +40,4 @@ export class GameComponent implements OnInit {
 		// Ready to display
 		this.display = true;
 	}
-
-
 }

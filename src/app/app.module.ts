@@ -28,6 +28,7 @@ import { GameviewComponent } from './gameview/gameview.component';
 import { PlayerNameGameComponent } from './player-name-game/player-name-game.component';
 import { GameIngameComponent } from './game-ingame/game-ingame.component';
 import { DateCountdownComponent } from './date-countdown/date-countdown.component';
+import { SecondCountdownComponent } from './second-countdown/second-countdown.component';
 
 @NgModule({
 	declarations: [
@@ -46,7 +47,8 @@ import { DateCountdownComponent } from './date-countdown/date-countdown.componen
 		GameviewComponent,
 		PlayerNameGameComponent,
 		GameIngameComponent,
-		DateCountdownComponent
+		DateCountdownComponent,
+		SecondCountdownComponent
 	],
 	imports: [
 		BrowserModule,

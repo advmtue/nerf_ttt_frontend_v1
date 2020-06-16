@@ -10,6 +10,7 @@ import { SocketService } from '../socket/socket.service';
 })
 export class GameviewComponent implements OnInit, OnDestroy {
 	public game: Game | undefined;
+	public debug: any;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -21,20 +22,42 @@ export class GameviewComponent implements OnInit, OnDestroy {
 
 		this.socket.io.on('getGame', this.getGame.bind(this));
 		this.socket.io.on('gameStart', this.gameStart.bind(this));
+		this.socket.io.on('timerUpdate', this.timerUpdate.bind(this));
 	}
 
 	ngOnDestroy() {
 		this.socket.io.off('getGame');
 		this.socket.io.off('gameStart');
+		this.socket.io.off('timerUpdate');
+	}
+
+	timerUpdate(seconds: number) {
+		if (!this.game) return;
+
+		// Game timer is already more accurate
+		if (this.game.timer < seconds) return;
+
+		this.game.timer = seconds;
 	}
 
 	// Request a fresh game state
-	gameStart() {
+	gameStart(time: number) {
+		this.debug = `game start time = ${time}`;
 		this.game.status = 'INGAME';
+		this.game.timer = time;
 	}
 
 	getGame(game: Game) {
 		console.log('Got game: ', game);
+
+		if (game.date_launched !== null) {
+			game.date_launched = new Date(game.date_launched);
+		}
+
+		if (game.date_ended !== null) {
+			game.date_ended = new Date(game.date_ended);
+		}
+
 		this.game = game;
 	}
 
