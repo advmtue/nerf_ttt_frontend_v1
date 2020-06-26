@@ -9,6 +9,9 @@ import { LogoutComponent } from './logout/logout.component';
 import { PasswordresetComponent } from './passwordreset/passwordreset.component';
 import { GameviewComponent } from './gameview/gameview.component';
 
+/**
+ * Guards
+ */
 import { LoginGuard } from './login.guard';
 import { LogoutGuard } from './logout.guard';
 import { PasswordresetGuard } from './passwordreset.guard'
@@ -19,26 +22,18 @@ const routes: Routes = [
 	{ path: 'lobby', component: LobbylistComponent, canActivate: [RedirectGuard, LoginGuard] },
 	{ path: '', pathMatch: 'full', redirectTo: '/lobby' },
 
-	// Player login
+	// Authentication specific
 	{ path: 'login', component: LoginComponent, canActivate: [RedirectGuard, LogoutGuard] },
-
-	// Logout
 	{ path: 'logout', component: LogoutComponent },
+	{ path: 'passwordreset', component: PasswordresetComponent, canActivate: [RedirectGuard, PasswordresetGuard] },
 
-	// View game history
+	// TODO Child routes
 	{ path: 'game', component: GamehistoryComponent, canActivate: [RedirectGuard, LoginGuard] },
-
-	// Redirects depending on state
-	// Game -> Game or home if not auth
-	// Lobby -> LobbyComponent
 	{ path: 'game/:id', component: GameviewComponent, canActivate: [RedirectGuard, LoginGuard] },
 
-	// View player list or specific
+	// TODO Child routes
 	{ path: 'player', component: PlayerlistComponent, canActivate: [RedirectGuard, LoginGuard] },
 	{ path: 'player/:id', component: PlayerprofileComponent, canActivate: [RedirectGuard, LoginGuard] },
-
-	// Reset password
-	{ path: 'passwordreset', component: PasswordresetComponent, canActivate: [RedirectGuard, PasswordresetGuard] }
 ];
 
 @NgModule({

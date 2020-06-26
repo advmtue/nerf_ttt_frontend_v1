@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Game } from '../../models/game';
 import { SocketService } from '../socket/socket.service';
+import { UserService } from '../user/user.service';
 
 @Component({
 	selector: 'app-gameview',
@@ -9,12 +10,14 @@ import { SocketService } from '../socket/socket.service';
 	styleUrls: ['./gameview.component.scss']
 })
 export class GameviewComponent implements OnInit, OnDestroy {
+	public revealing: boolean = false;
 	public game: Game | undefined;
 	public debug: any;
 
 	constructor(
 		private route: ActivatedRoute,
 		private socket: SocketService,
+		private user: UserService,
 	) {
 		this.route.paramMap.subscribe(params => {
 			this.setGame(Number(params.get('id')));
@@ -23,12 +26,25 @@ export class GameviewComponent implements OnInit, OnDestroy {
 		this.socket.io.on('getGame', this.getGame.bind(this));
 		this.socket.io.on('gameStart', this.gameStart.bind(this));
 		this.socket.io.on('timerUpdate', this.timerUpdate.bind(this));
+		this.socket.io.on('reveal', this.reveal.bind(this));
+	}
+
+	get localPlayer() {
+		return this.game.players.find(pl => pl.id === this.user.player.id);
 	}
 
 	ngOnDestroy() {
 		this.socket.io.off('getGame');
 		this.socket.io.off('gameStart');
 		this.socket.io.off('timerUpdate');
+		this.socket.io.off('reveal');
+	}
+
+	reveal() {
+		console.log('Got reveal message');
+		this.revealing = true;
+
+		setTimeout(() => this.revealing = false, 10000);
 	}
 
 	timerUpdate(seconds: number) {

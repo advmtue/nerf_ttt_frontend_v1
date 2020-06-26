@@ -1,0 +1,23 @@
+@import '~src/styles.scss';
+
+div {
+	display: flex;
+	justify-content: center;
+	padding: 5em;
+
+	&.TRAITOR {
+		background-color: $color-ttt-traitor;
+	}
+
+	&.DETECTIVE {
+		background-color: $color-ttt-detective;
+	}
+
+	&.INNOCENT {
+		background-color: $color-ttt-innocent;
+	}
+
+	p {
+		font-size: 4em;
+	}
+}

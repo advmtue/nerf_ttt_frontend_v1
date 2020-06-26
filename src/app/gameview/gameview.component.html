@@ -1,4 +1,4 @@
-<div *ngIf='game'>
+<div class="gamewview-wrap" *ngIf='game'>
 	<div [ngSwitch]='game.status'>
 	<div *ngSwitchCase="'LOBBY'">
 		<app-lobby [game]='game'></app-lobby>
@@ -7,7 +7,12 @@
 		<app-game [game]='game'></app-game>
 	</div>
 	<div *ngSwitchCase="'INGAME'">
-		<app-game-ingame [game]='game'></app-game-ingame>
+		<div *ngIf='revealing'>
+			<app-game-ingame-reveal [player]='localPlayer'></app-game-ingame-reveal>
+		</div>
+		<div *ngIf='!revealing'>
+			<app-game-ingame [game]='game'></app-game-ingame>
+		</div>
 	</div>
 	<div *ngSwitchCase="'ENDED'">
 		<p>This is where I would put my stats.</p>

@@ -29,6 +29,7 @@ import { PlayerNameGameComponent } from './player-name-game/player-name-game.com
 import { GameIngameComponent } from './game-ingame/game-ingame.component';
 import { DateCountdownComponent } from './date-countdown/date-countdown.component';
 import { SecondCountdownComponent } from './second-countdown/second-countdown.component';
+import { GameIngameRevealComponent } from './game-ingame-reveal/game-ingame-reveal.component';
 
 @NgModule({
 	declarations: [
@@ -48,7 +49,8 @@ import { SecondCountdownComponent } from './second-countdown/second-countdown.co
 		PlayerNameGameComponent,
 		GameIngameComponent,
 		DateCountdownComponent,
-		SecondCountdownComponent
+		SecondCountdownComponent,
+		GameIngameRevealComponent
 	],
 	imports: [
 		BrowserModule,
@@ -66,6 +68,10 @@ import { SecondCountdownComponent } from './second-countdown/second-countdown.co
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptor,
 			multi: true
+		},
+		{
+			provide: 'API_URL',
+			useValue: 'http://192.168.1.111:8080/',
 		}
 	],
 	bootstrap: [AppComponent]

@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Player, PlayerProfile } from '../../models/player';
-import { API_URL } from '../config';
 import { WebResponse } from '../../models/response';
 import { Game } from 'src/models/game';
 import { PlayerLogin } from '../../models/player';
@@ -12,10 +11,11 @@ import { PlayerLogin } from '../../models/player';
 export class ApiService {
 	constructor(
 		private http: HttpClient,
+		@Inject('API_URL') private apiUrl: string,
 	) {}
 
 	getUrl(url: string) {
-		return API_URL + url;
+		return this.apiUrl + url;
 	}
 
 	/**

@@ -22,6 +22,10 @@
 		</div>
 		<div *ngIf='shouldShowAbilities'>
 			<p>Nothing to see here, chief.</p>
+			<div *ngIf='localPlayer.role === "DETECTIVE"'>
+				<p>Some detective abaility shit.</p>
+				<div class="button button-blue" (click)='detectiveUseReveal()'>Reveal someone...</div>
+			</div>
 		</div>
 		<div *ngIf='!showKillerList'>
 			<div class="button button-red-outline" (click)='toggleDeath()'>I'm Dead</div>

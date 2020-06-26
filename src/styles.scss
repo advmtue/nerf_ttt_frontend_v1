@@ -119,6 +119,11 @@ button, .button {
 		border: none;
 	}
 
+	&.button-blue {
+		background-color: $color-ttt-detective;
+		border: none;
+	}
+
 	&.button-red-outline {
 		border: 1px solid $color-ttt-red-dark;
 	}

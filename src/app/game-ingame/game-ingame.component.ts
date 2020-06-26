@@ -70,4 +70,13 @@ export class GameIngameComponent implements OnInit {
 		console.log(this.selectedKiller);
 		this.socket.io.emit('playerRegisterDeath', this.game.id, Number(this.selectedKiller));
 	}
+
+	detectiveUseReveal() {
+		// Pick a random player
+		const randomPlayer = this.game.players[Math.floor(Math.random() * this.game.players.length)];
+		const playerId = randomPlayer.id;
+		console.log('using reveal on ', playerId);
+
+		this.socket.io.emit('detectiveUseReveal', this.game.id, playerId);
+	}
 }
