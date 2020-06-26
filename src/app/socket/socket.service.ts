@@ -1,7 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import * as io from 'socket.io-client';
-import { API_URL } from '../config';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,19 +10,21 @@ export class SocketService {
 
 	public connectionStatus: BehaviorSubject<string>;
 
-	constructor() {
+	constructor(
+		@Inject('API_URL') private apiUrl: string
+	) {
 		this.connectionStatus = new BehaviorSubject<string>('SOCKET_NONE');
 
-		this.io = io(API_URL);
+		this.io = io(this.apiUrl);
 
-		this.io.on('connect', this.connected);
-		this.io.on('auth', this.authed);
-		this.io.on('disconnect', this.disconnected);
+		this.io.on('connect', this.connected.bind(this));
+		this.io.on('auth', this.authed.bind(this));
+		this.io.on('disconnect', this.disconnected.bind(this));
 	}
 
 
 	// socket-event :: disconnect
-	disconnected = () => {
+	disconnected() {
 		this.connectionStatus.next('SOCKET_NONE');
 
 		// Attempt to reconnect every second
@@ -38,13 +39,13 @@ export class SocketService {
 	}
 
 	// socket-event :: connect
-	connected = () => {
+	connected() {
 		console.log('Socket connected.');
 		this.connectionStatus.next('SOCKET_CONNECT');
 	}
 
 	// socket-event :: auth
-	authed = (authStatus: boolean) => {
+	authed(authStatus: boolean) {
 		if (authStatus === false ) {
 			return;
 		}
