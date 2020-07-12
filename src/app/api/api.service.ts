@@ -116,12 +116,6 @@ export class ApiService {
 		)
 	}
 
-	whoAmI() {
-		return this.http.get<WebResponse<Player>>(
-			this.getUrl('player/self')
-		);
-	}
-
 	/* Join a game */
 	joinGame(gameId: number) {
 		return this.http.put<WebResponse<boolean>>(
@@ -138,14 +132,14 @@ export class ApiService {
 	}
 
 	// Set ready = true
-	readyUp(gameId: number) {
+	gameSetReady(gameId: number) {
 		return this.http.put<WebResponse<boolean>>(
 			this.getUrl(`game/${gameId}/ready`), {}
 		);
 	}
 
 	// Set ready = false
-	unready(gameId: number) {
+	gameSetUnready(gameId: number) {
 		return this.http.put<WebResponse<boolean>>(
 			this.getUrl(`game/${gameId}/unready`), {}
 		)

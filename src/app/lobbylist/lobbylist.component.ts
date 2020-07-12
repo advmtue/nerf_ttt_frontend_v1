@@ -11,7 +11,6 @@ import { GameLobby } from '../../models/game';
 	styleUrls: ['./lobbylist.component.scss']
 })
 export class LobbylistComponent implements OnInit, OnDestroy {
-
 	public lobbies: GameLobby[] = [];
 	public newLobbyName = '';
 	public createLobbyError = '';
@@ -21,19 +20,37 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 		public user: UserService,
 		public api: ApiService,
 		public router: Router
-	) {
-		// Get lobby list
+	) {}
+
+	ngOnInit(): void {
 		this.socket.io.on('getLobbyList', this.getLobbyList.bind(this));
 		this.socket.io.on('removeLobby', this.removeLobby.bind(this));
 		this.socket.io.on('addLobby', this.addLobby.bind(this));
 		this.socket.io.on('lobbyPlayerChange', this.lobbyPlayerChange.bind(this));
 
+		/**
+		 * Whenever the socket becomes 'READY', pull the lobby list.
+		 * This also occurs the first time we subscribe (BehaviorSubject)
+		 */
+		this.socket.connectionStatus
+			.subscribe((status: string) => {
+				if (status === 'SOCKET_READY') {
+					this.requestLobbyList();
+				}
+			});
+	}
+
+	/**
+	 * Request the lobby list from the server
+	 * Should also subscribe the socket to listen for all lobby updates
+	 */
+	requestLobbyList() {
 		this.socket.io.emit('getLobbyList');
 	}
 
-	ngOnInit(): void {
-	}
-
+	/**
+	 * Clear socket routes
+	 */
 	ngOnDestroy(): void {
 		this.socket.io.off('getLobbyList');
 		this.socket.io.off('removeLobby');
@@ -41,28 +58,39 @@ export class LobbylistComponent implements OnInit, OnDestroy {
 		this.socket.io.off('lobbyPlayerChange');
 	}
 
+	/**
+	 * Number of players changed in a given lobby
+	 */
 	lobbyPlayerChange(lobbyId: number, count: number) {
 		const l = this.lobbies.find(lobby => lobby.id === lobbyId);
 		if (!l) return;
 		l.player_count = count;
 	}
 
-	// Recieve the list of lobbies
+	/**
+	 * Recieve the list of lobbies
+	 */
 	getLobbyList(lobbies: GameLobby[]) {
-		console.log(lobbies);
 		this.lobbies = lobbies;
 	}
 
-	// Remove a lobby by a given id
+	/**
+	 * Lobby with given lobbyId is no longer visible
+	 */
 	removeLobby(lobbyId: number) {
 		this.lobbies = this.lobbies.filter(lobby => lobby.id !== lobbyId);
 	}
 
-	// Add a new lobby to the list
+	/**
+	 * Push a new lobby to the lobby list
+	 */
 	addLobby(lobby: GameLobby) {
 		this.lobbies.push(lobby);
 	}
 
+	/**
+	 * Create a new lobby
+	 */
 	createNewLobby() {
 		if (this.newLobbyName === '') {
 			return;

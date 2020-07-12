@@ -20,7 +20,14 @@
 
 <div class="container" *ngIf="user.hasPermission('createLobby')">
 	<h3 class="title">Create Lobby</h3>
-	<input placeholder='Game name' type="text" [(ngModel)]="newLobbyName"><br>
+	<input
+		placeholder='Game name'
+		type="text"
+		[(ngModel)]="newLobbyName"
+		(keydown.enter)="createNewLobby()">
+	<br>
 	<p class="error" *ngIf="createLobbyError === ''">{{ createLobbyError }}</p>
-	<a class="button" (click)='createNewLobby()'>Create</a>
+	<a
+		class="button"
+		(click)='createNewLobby()'>Create</a>
 </div>

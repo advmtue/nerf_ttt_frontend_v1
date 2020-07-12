@@ -103,9 +103,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
 	// Ready / Unready
 	setReady(ready: boolean = true) {
 		if (ready) {
-			this.api.readyUp(this.game.id).subscribe(this.checkWebResponse);
+			this.api.gameSetReady(this.game.id).subscribe(this.checkWebResponse);
 		} else {
-			this.api.unready(this.game.id).subscribe(this.checkWebResponse);
+			this.api.gameSetUnready(this.game.id).subscribe(this.checkWebResponse);
 		}
 	}
 
